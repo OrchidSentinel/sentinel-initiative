@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+body{
+background:black;
+overflow:hidden;
+}
+
+#dot{
+width:25px;
+height:25px;
+background:red;
+border-radius:50%;
+position:absolute;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="dot"></div>
+
+<script>
+
+let dot = document.getElementById("dot");
+let score = 0;
+
+function moveDot(){
+
+dot.style.left =
+Math.random()*90 + "%";
+
+dot.style.top =
+Math.random()*90 + "%";
+
+}
+
+moveDot();
+
+dot.onclick = function(){
+
+score++;
+
+moveDot();
+
+if(score >= 5){
+
+alert("SONAR RECOVERY COMPLETE\nCODE: BLACK-441");
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
