@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Sentinel Terminal</title>
+
+<style>
+body{
+    background:black;
+    color:#00ff66;
+    font-family:Courier New;
+    padding:30px;
+}
+
+#output{
+    margin-bottom:20px;
+    white-space:pre-line;
+}
+
+input{
+    width:100%;
+    background:black;
+    border:none;
+    color:#00ff66;
+    font-size:18px;
+    outline:none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="output">
+SENTINEL TERMINAL v2.4
+
+AVAILABLE COMMANDS:
+- open 77A
+- recover logs
+- sonar scan
+</div>
+
+<input id="command" autofocus>
+
+<script>
+
+const input = document.getElementById("command");
+const output = document.getElementById("output");
+
+input.addEventListener("keydown", function(e){
+
+if(e.key === "Enter"){
+
+let cmd = input.value.toLowerCase();
+
+output.innerHTML += "\n\n> " + cmd;
+
+if(cmd === "open 77a"){
+    output.innerHTML += "\nACCESSING INCIDENT FILE...";
+    window.location.href = "incident-77A.html";
+}
+
+else if(cmd === "recover logs"){
+    output.innerHTML += "\nRECOVERED PARTIAL CODE: SI-441";
+}
+
+else if(cmd === "sonar scan"){
+    output.innerHTML += "\nUNKNOWN SIGNAL DETECTED AT DEPTH 3420.";
+}
+
+else{
+    output.innerHTML += "\nCOMMAND NOT RECOGNIZED.";
+}
+
+input.value = "";
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
