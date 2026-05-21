@@ -1,60 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-<style>
+<meta charset="UTF-8">
+<title>Sonar Recovery</title>
 
+<style>
 body{
-background:black;
-overflow:hidden;
+    margin:0;
+    background:black;
+    color:#ff2b2b;
+    font-family:Courier New;
+    overflow:hidden;
+}
+
+#login{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    background:#020202;
+    z-index:5;
+}
+
+input,button{
+    background:#000;
+    color:#ff2b2b;
+    border:1px solid #8b0000;
+    padding:12px;
+    font-family:inherit;
+    margin-top:10px;
 }
 
 #dot{
-width:25px;
-height:25px;
-background:red;
-border-radius:50%;
-position:absolute;
-cursor:pointer;
+    width:24px;
+    height:24px;
+    background:red;
+    border-radius:50%;
+    position:absolute;
+    cursor:pointer;
+    box-shadow:0 0 20px red;
+    display:none;
 }
 
+#info{
+    position:absolute;
+    top:20px;
+    left:20px;
+}
 </style>
 </head>
 
 <body>
 
+<div id="login">
+    <h1>SONAR ACCESS REQUIRED</h1>
+    <p>Code aus Sentinel Terminal eingeben.</p>
+    <input id="code" placeholder="SONAR ACCESS CODE">
+    <button onclick="unlock()">VERIFY</button>
+    <p id="error"></p>
+</div>
+
+<div id="info">SONAR PINGS RECOVERED: <span id="score">0</span>/5</div>
 <div id="dot"></div>
 
 <script>
-
 let dot = document.getElementById("dot");
 let score = 0;
 
-function moveDot(){
+function unlock(){
+    const code = document.getElementById("code").value.trim();
 
-dot.style.left =
-Math.random()*90 + "%";
-
-dot.style.top =
-Math.random()*90 + "%";
-
+    if(code === "DEPTH-3420"){
+        document.getElementById("login").style.display = "none";
+        dot.style.display = "block";
+        moveDot();
+    }else{
+        document.getElementById("error").innerText = "ACCESS DENIED";
+    }
 }
 
-moveDot();
+function moveDot(){
+    dot.style.left = Math.random() * 90 + "%";
+    dot.style.top = Math.random() * 85 + "%";
+}
 
 dot.onclick = function(){
+    score++;
+    document.getElementById("score").innerText = score;
+    moveDot();
 
-score++;
-
-moveDot();
-
-if(score >= 5){
-
-alert("SONAR RECOVERY COMPLETE\nCODE: BLACK-441");
-
+    if(score >= 5){
+        alert("SONAR RECOVERY COMPLETE\nRETURN CODE FOR TERMINAL: BLACK-441");
+        window.location.href = "terminal.html";
+    }
 }
-
-}
-
 </script>
 
 </body>
