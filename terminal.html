@@ -73,6 +73,12 @@ let cmd = input.value.trim().toLowerCase();
 
 output.innerHTML += "\n\n> " + cmd;
 
+
+
+
+
+/* RICHTIGER COMMAND */
+
 if(cmd === "recover 77a"){
 
 output.innerHTML += `
@@ -89,7 +95,58 @@ OPEN SONAR RECOVERY
 
 }
 
+
+
+
+
+/* FALSCHE COMMANDS */
+
+else if(cmd === "open 77a"){
+
+output.innerHTML += `
+<br><br>
+DIRECT FILE ACCESS DENIED.
+<br>
+RECOVERY PROTOCOL REQUIRED.
+`;
+
 }
+
+else if(cmd === "77a"){
+
+output.innerHTML += `
+<br><br>
+INCOMPLETE COMMAND.
+`;
+
+}
+
+else if(cmd === "incident 77a"){
+
+output.innerHTML += `
+<br><br>
+INVALID PREFIX.
+`;
+
+}
+
+else if(cmd === "help"){
+
+output.innerHTML += `
+<br><br>
+AVAILABLE:
+- recover
+- scan
+- verify
+`;
+
+}
+
+
+
+
+
+/* SONAR VERIFIKATION */
 
 else if(cmd === "verify sonar"){
 
@@ -99,6 +156,12 @@ ENTER RETURN CODE.
 `;
 
 }
+
+
+
+
+
+/* RÜCKKEHR-CODE */
 
 else if(cmd === "black-441"){
 
@@ -118,6 +181,12 @@ OPEN BLACKBOX ACCESS
 `;
 
 }
+
+
+
+
+
+/* UNBEKANNTER COMMAND */
 
 else{
 
