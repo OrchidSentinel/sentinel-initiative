@@ -8,6 +8,90 @@
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
 <style>
+.terminal-access-box{
+    margin-top:35px;
+    padding:22px;
+    border:1px solid #8b0000;
+    background:
+        linear-gradient(90deg, rgba(120,0,0,.25), transparent),
+        #050505;
+    box-shadow:0 0 30px rgba(180,0,0,.25);
+    position:relative;
+    overflow:hidden;
+}
+
+.terminal-access-box::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 12px,
+        rgba(255,0,0,.06) 13px
+    );
+    animation:scanMove 2s linear infinite;
+}
+
+.terminal-warning{
+    color:#ff2b2b;
+    font-size:13px;
+    letter-spacing:2px;
+    margin-bottom:14px;
+    position:relative;
+    z-index:2;
+}
+
+.special-terminal{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:15px 22px;
+    border:1px solid #ff2b2b;
+    color:#fff;
+    background:#120000;
+    text-decoration:none;
+    letter-spacing:2px;
+    position:relative;
+    z-index:2;
+    box-shadow:0 0 20px rgba(255,0,0,.35);
+    transition:.2s;
+}
+
+.special-terminal:hover{
+    background:#250000;
+    transform:scale(1.03);
+    box-shadow:0 0 35px rgba(255,0,0,.65);
+}
+
+.pulse-dot{
+    width:10px;
+    height:10px;
+    background:#ff2b2b;
+    border-radius:50%;
+    box-shadow:0 0 12px #ff2b2b;
+    animation:pulse 1s infinite;
+}
+
+.terminal-subtext{
+    color:#777;
+    margin-top:13px;
+    font-size:12px;
+    position:relative;
+    z-index:2;
+}
+
+@keyframes pulse{
+    0%{opacity:1; transform:scale(1);}
+    50%{opacity:.4; transform:scale(1.6);}
+    100%{opacity:1; transform:scale(1);}
+}
+
+@keyframes scanMove{
+    from{transform:translateX(-100px);}
+    to{transform:translateX(100px);}
+}
+    
 .terminal-btn{
     display:inline-block;
     margin-top:25px;
@@ -109,9 +193,21 @@ HINWEIS: Originalakte wurde als PNG hier eingefügt.
 
 <img src="akte-u-boot.png" alt="Originalakte SI-GSD-77A">
 
+
+<div class="terminal-access-box">
+    <div class="terminal-warning">RESTRICTED SYSTEM LINK DETECTED</div>
+
+    <a class="terminal-btn special-terminal" href="terminal.html">
+        <span class="pulse-dot"></span>
+        OPEN SENTINEL TERMINAL
+    </a>
+
+    <div class="terminal-subtext">
+        External recovery protocol required // Node access unstable
+    </div>
 </div>
 
-<a class="terminal-btn" href="terminal.html">OPEN SENTINEL TERMINAL</a>
+</div>
 
 </body>
 </html>
