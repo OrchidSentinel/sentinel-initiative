@@ -5,19 +5,16 @@
 <title>Sentinel Terminal</title>
 
 <style>
-
 body{
     background:black;
     color:#00ff66;
     font-family:Courier New;
     padding:30px;
 }
-
 #output{
     white-space:pre-line;
     margin-bottom:20px;
 }
-
 input{
     width:100%;
     background:black;
@@ -27,11 +24,7 @@ input{
     font-size:18px;
     outline:none;
 }
-
-a{
-    color:red;
-}
-
+a{ color:red; }
 </style>
 </head>
 
@@ -42,8 +35,8 @@ SENTINEL TERMINAL // GSD NODE
 
 AVAILABLE COMMANDS:
 - help
-- clear
 - scan
+- clear
 
 --------------------------------
 
@@ -61,148 +54,56 @@ Do not include symbols.
 <input id="command" autofocus placeholder="ENTER COMMAND">
 
 <script>
-
 const input = document.getElementById("command");
 const output = document.getElementById("output");
 
 input.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        let cmd = input.value.trim().toLowerCase();
+        output.innerHTML += "\n\n> " + cmd;
 
-if(e.key === "Enter"){
+        if(cmd === "recover 77a"){
+            output.innerHTML += `
+<br><br>PARTIAL ACCESS GRANTED.
+<br>SONAR ACCESS CODE: DEPTH-3420
+<br><br><a href="sonar.html">OPEN SONAR RECOVERY</a>`;
+        }
 
-let cmd = input.value.trim().toLowerCase();
+        else if(cmd === "open 77a"){
+            output.innerHTML += `<br><br>DIRECT FILE ACCESS DENIED.<br>RECOVERY PROTOCOL REQUIRED.`;
+        }
 
-output.innerHTML += "\n\n> " + cmd;
+        else if(cmd === "77a"){
+            output.innerHTML += `<br><br>INCOMPLETE COMMAND.`;
+        }
 
+        else if(cmd === "help"){
+            output.innerHTML += `<br><br>AVAILABLE:<br>- scan<br>- clear<br>- recover [incident]`;
+        }
 
+        else if(cmd === "scan"){
+            output.innerHTML += `<br><br>ACTIVE INCIDENT FOUND: SI-GSD-77A-Ω`;
+        }
 
+        else if(cmd === "clear"){
+            output.innerHTML = "SENTINEL TERMINAL // GSD NODE";
+        }
 
+        else if(cmd === "black-441"){
+            output.innerHTML += `
+<br><br>SONAR RETURN VERIFIED.
+<br>BLACKBOX ACCESS PASSWORD:
+<br><br>REACTOR-77
+<br><br><a href="access-incident.html">OPEN BLACKBOX ACCESS</a>`;
+        }
 
-/* RICHTIGER COMMAND */
+        else{
+            output.innerHTML += `<br><br>COMMAND NOT RECOGNIZED.`;
+        }
 
-if(cmd === "recover 77a"){
-
-output.innerHTML += `
-<br><br>
-PARTIAL ACCESS GRANTED.
-<br>
-SONAR ACCESS CODE: DEPTH-3420
-<br><br>
-
-<a href="sonar.html">
-OPEN SONAR RECOVERY
-</a>
-`;
-
-}
-
-
-
-
-
-/* FALSCHE COMMANDS */
-
-else if(cmd === "open 77a"){
-
-output.innerHTML += `
-<br><br>
-DIRECT FILE ACCESS DENIED.
-<br>
-RECOVERY PROTOCOL REQUIRED.
-`;
-
-}
-
-else if(cmd === "77a"){
-
-output.innerHTML += `
-<br><br>
-INCOMPLETE COMMAND.
-`;
-
-}
-
-else if(cmd === "incident 77a"){
-
-output.innerHTML += `
-<br><br>
-INVALID PREFIX.
-`;
-
-}
-
-else if(cmd === "help"){
-
-output.innerHTML += `
-<br><br>
-AVAILABLE:
-- recover
-- scan
-- verify
-`;
-
-}
-
-
-
-
-
-/* SONAR VERIFIKATION */
-
-else if(cmd === "verify sonar"){
-
-output.innerHTML += `
-<br><br>
-ENTER RETURN CODE.
-`;
-
-}
-
-
-
-
-
-/* RÜCKKEHR-CODE */
-
-else if(cmd === "black-441"){
-
-output.innerHTML += `
-<br><br>
-SONAR RETURN VERIFIED.
-<br>
-BLACKBOX ACCESS PASSWORD:
-<br><br>
-
-REACTOR-77
-<br><br>
-
-<a href="access-incident.html">
-OPEN BLACKBOX ACCESS
-</a>
-`;
-
-}
-
-
-
-
-
-/* UNBEKANNTER COMMAND */
-
-else{
-
-output.innerHTML += `
-<br><br>
-COMMAND NOT RECOGNIZED.
-`;
-
-}
-
-input.value = "";
-
-}
-
+        input.value = "";
+    }
 });
-
 </script>
 
 </body>
