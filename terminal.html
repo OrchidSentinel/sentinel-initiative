@@ -5,6 +5,7 @@
 <title>Sentinel Terminal</title>
 
 <style>
+
 body{
     background:black;
     color:#00ff66;
@@ -24,7 +25,13 @@ input{
     color:#00ff66;
     padding:12px;
     font-size:18px;
+    outline:none;
 }
+
+a{
+    color:red;
+}
+
 </style>
 </head>
 
@@ -33,7 +40,7 @@ input{
 <div id="output">
 SENTINEL TERMINAL // GSD NODE
 
-COMMANDS:
+AVAILABLE COMMANDS:
 - recover 77A
 - verify sonar
 </div>
@@ -41,37 +48,77 @@ COMMANDS:
 <input id="command" autofocus placeholder="ENTER COMMAND">
 
 <script>
+
 const input = document.getElementById("command");
 const output = document.getElementById("output");
 
 input.addEventListener("keydown", function(e){
-    if(e.key === "Enter"){
-        let cmd = input.value.toLowerCase().trim();
-        output.innerHTML += "\n\n> " + cmd;
 
-        if(cmd === "recover 77a"){
-            output.innerHTML += "\nPARTIAL ACCESS GRANTED.";
-            output.innerHTML += "\nSONAR ACCESS CODE: DEPTH-3420";
-            output.innerHTML += "\nOPEN: sonar.html";
-        }
+if(e.key === "Enter"){
 
-        else if(cmd === "verify sonar"){
-            output.innerHTML += "\nENTER RETURN CODE:";
-        }
+let cmd = input.value.trim().toLowerCase();
 
-        else if(cmd === "BLACK-441".toLowerCase()){
-            output.innerHTML += "\nSONAR RETURN VERIFIED.";
-            output.innerHTML += "\nBLACKBOX ACCESS PASSWORD: REACTOR-77";
-            output.innerHTML += "\nOPEN: access-incident.html";
-        }
+output.innerHTML += "\n\n> " + cmd;
 
-        else{
-            output.innerHTML += "\nACCESS DENIED.";
-        }
+if(cmd === "recover 77a"){
 
-        input.value = "";
-    }
+output.innerHTML += `
+<br><br>
+PARTIAL ACCESS GRANTED.
+<br>
+SONAR ACCESS CODE: DEPTH-3420
+<br><br>
+
+<a href="sonar.html">
+OPEN SONAR RECOVERY
+</a>
+`;
+
+}
+
+else if(cmd === "verify sonar"){
+
+output.innerHTML += `
+<br><br>
+ENTER RETURN CODE.
+`;
+
+}
+
+else if(cmd === "black-441"){
+
+output.innerHTML += `
+<br><br>
+SONAR RETURN VERIFIED.
+<br>
+BLACKBOX ACCESS PASSWORD:
+<br><br>
+
+REACTOR-77
+<br><br>
+
+<a href="access-incident.html">
+OPEN BLACKBOX ACCESS
+</a>
+`;
+
+}
+
+else{
+
+output.innerHTML += `
+<br><br>
+COMMAND NOT RECOGNIZED.
+`;
+
+}
+
+input.value = "";
+
+}
+
 });
+
 </script>
 
 </body>
