@@ -13,17 +13,17 @@ body{
 }
 
 #output{
-    margin-bottom:20px;
     white-space:pre-line;
+    margin-bottom:20px;
 }
 
 input{
     width:100%;
     background:black;
-    border:none;
+    border:1px solid #00ff66;
     color:#00ff66;
+    padding:12px;
     font-size:18px;
-    outline:none;
 }
 </style>
 </head>
@@ -31,52 +31,47 @@ input{
 <body>
 
 <div id="output">
-SENTINEL TERMINAL v2.4
+SENTINEL TERMINAL // GSD NODE
 
-AVAILABLE COMMANDS:
-- open 77A
-- recover logs
-- sonar scan
+COMMANDS:
+- recover 77A
+- verify sonar
 </div>
 
-<input id="command" autofocus>
+<input id="command" autofocus placeholder="ENTER COMMAND">
 
 <script>
-
 const input = document.getElementById("command");
 const output = document.getElementById("output");
 
 input.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        let cmd = input.value.toLowerCase().trim();
+        output.innerHTML += "\n\n> " + cmd;
 
-if(e.key === "Enter"){
+        if(cmd === "recover 77a"){
+            output.innerHTML += "\nPARTIAL ACCESS GRANTED.";
+            output.innerHTML += "\nSONAR ACCESS CODE: DEPTH-3420";
+            output.innerHTML += "\nOPEN: sonar.html";
+        }
 
-let cmd = input.value.toLowerCase();
+        else if(cmd === "verify sonar"){
+            output.innerHTML += "\nENTER RETURN CODE:";
+        }
 
-output.innerHTML += "\n\n> " + cmd;
+        else if(cmd === "BLACK-441".toLowerCase()){
+            output.innerHTML += "\nSONAR RETURN VERIFIED.";
+            output.innerHTML += "\nBLACKBOX ACCESS PASSWORD: REACTOR-77";
+            output.innerHTML += "\nOPEN: access-incident.html";
+        }
 
-if(cmd === "open 77a"){
-    output.innerHTML += "\nACCESSING INCIDENT FILE...";
-    window.location.href = "incident-77A.html";
-}
+        else{
+            output.innerHTML += "\nACCESS DENIED.";
+        }
 
-else if(cmd === "recover logs"){
-    output.innerHTML += "\nRECOVERED PARTIAL CODE: SI-441";
-}
-
-else if(cmd === "sonar scan"){
-    output.innerHTML += "\nUNKNOWN SIGNAL DETECTED AT DEPTH 3420.";
-}
-
-else{
-    output.innerHTML += "\nCOMMAND NOT RECOGNIZED.";
-}
-
-input.value = "";
-
-}
-
+        input.value = "";
+    }
 });
-
 </script>
 
 </body>
