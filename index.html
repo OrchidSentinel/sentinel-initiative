@@ -12,12 +12,14 @@
 
 body{
     margin:0;
-    background:#030303;
-    color:#d6d6d6;
-    font-family:'Share Tech Mono', monospace;
     min-height:100vh;
+    background:#020202;
+    color:#e5e5e5;
+    font-family:'Share Tech Mono', monospace;
+    overflow-x:hidden;
 }
 
+/* Scanlines */
 body::before{
     content:"";
     position:fixed;
@@ -33,96 +35,148 @@ body::before{
     z-index:999;
 }
 
+/* Dark vignette */
 body::after{
     content:"";
     position:fixed;
     inset:0;
-    background:radial-gradient(circle, transparent 55%, rgba(0,0,0,.85));
+    background:radial-gradient(circle, transparent 45%, rgba(0,0,0,.9));
     pointer-events:none;
     z-index:998;
 }
 
-.header{
-    padding:38px;
-    border-bottom:1px solid #5c0000;
-    background:linear-gradient(180deg,#111,#050505);
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 28px;
+    background:#090909;
+    border-bottom:1px solid #740000;
+    font-size:13px;
+    color:#999;
+}
+
+.alert{
+    color:#ff2b2b;
+}
+
+.wrapper{
+    max-width:1200px;
+    margin:auto;
+    padding:35px;
+}
+
+.hero{
+    border:1px solid #790000;
+    background:
+        linear-gradient(135deg, rgba(120,0,0,.18), transparent 40%),
+        #080808;
+    padding:35px;
+    box-shadow:0 0 35px rgba(130,0,0,.25);
+    position:relative;
+}
+
+.hero::after{
+    content:"CLASSIFIED";
+    position:absolute;
+    right:25px;
+    top:25px;
+    color:rgba(255,0,0,.16);
+    font-size:56px;
+    transform:rotate(-12deg);
+    border:3px solid rgba(255,0,0,.12);
+    padding:8px 18px;
 }
 
 .logo{
-    color:#b00000;
-    font-size:42px;
-    letter-spacing:4px;
-    text-shadow:0 0 12px #8b0000;
+    color:#ff1e1e;
+    font-size:44px;
+    letter-spacing:5px;
+    text-shadow:0 0 14px #8b0000;
 }
 
 .sub{
-    color:#777;
     margin-top:8px;
+    color:#aaa;
     letter-spacing:2px;
 }
 
-.status{
-    margin-top:20px;
-    color:#ff3333;
-    font-size:14px;
+.operation{
+    margin-top:25px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px;
 }
 
-.container{
-    padding:35px;
-    max-width:1100px;
-    margin:auto;
+.opbox{
+    border:1px solid #2b2b2b;
+    background:#050505;
+    padding:14px;
 }
 
-.notice{
-    border:1px solid #5c0000;
-    background:#0b0b0b;
-    padding:20px;
-    margin-bottom:30px;
-    box-shadow:0 0 20px rgba(120,0,0,.25);
+.opbox span{
+    display:block;
+    color:#777;
+    font-size:12px;
 }
 
-.notice b{
-    color:#ff3333;
+.opbox b{
+    color:#fff;
+    font-size:16px;
+}
+
+.red{
+    color:#ff2b2b!important;
+}
+
+.section-title{
+    margin:35px 0 15px;
+    color:#ff2b2b;
+    border-left:4px solid #8b0000;
+    padding-left:12px;
+    letter-spacing:2px;
 }
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:20px;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:18px;
 }
 
-.file{
-    border:1px solid #3b0000;
-    background:#090909;
+.card{
+    background:#070707;
+    border:1px solid #2c2c2c;
     padding:20px;
-    min-height:210px;
+    min-height:220px;
     position:relative;
     transition:.2s;
 }
 
-.file:hover{
+.card:hover{
+    border-color:#a00000;
     transform:translateY(-3px);
-    border-color:#8b0000;
-    box-shadow:0 0 18px rgba(180,0,0,.25);
+    box-shadow:0 0 22px rgba(170,0,0,.22);
 }
 
-.file h2{
-    color:#b00000;
-    font-size:20px;
+.card h2{
+    color:#fff;
+    font-size:18px;
     margin-top:0;
 }
 
-.file p{
-    color:#bdbdbd;
+.card p{
+    color:#aaa;
     line-height:1.5;
+    font-size:14px;
 }
 
-.tag{
-    display:inline-block;
-    margin-top:10px;
+.stamp{
+    position:absolute;
+    bottom:15px;
+    left:20px;
+    color:#ff2b2b;
+    border:1px solid #740000;
     padding:4px 8px;
-    border:1px solid #700;
-    color:#ff3333;
     font-size:12px;
 }
 
@@ -131,93 +185,154 @@ a{
     text-decoration:none;
 }
 
-.footer{
-    color:#555;
-    margin-top:35px;
-    font-size:12px;
-    border-top:1px solid #222;
-    padding-top:20px;
+.terminal{
+    margin-top:30px;
+    background:#030303;
+    border:1px solid #333;
+    padding:18px;
+    color:#bfbfbf;
+    font-size:13px;
+}
+
+.terminal p{
+    margin:6px 0;
 }
 
 .redacted{
     background:#000;
-    color:#000;
-    padding:0 20px;
+    color:transparent;
+    padding:0 35px;
+    user-select:none;
+}
+
+.footer{
+    margin-top:35px;
+    color:#555;
+    font-size:12px;
+    border-top:1px solid #222;
+    padding-top:18px;
 }
 
 @keyframes flicker{
     0%,100%{opacity:1}
-    45%{opacity:.96}
-    48%{opacity:.75}
-    52%{opacity:1}
+    47%{opacity:.98}
+    50%{opacity:.78}
+    53%{opacity:1}
 }
 
 .flicker{
-    animation:flicker 2.6s infinite;
+    animation:flicker 3.5s infinite;
 }
 </style>
 </head>
 
 <body>
 
-<header class="header flicker">
-    <div class="logo">SENTINEL INITIATIVE</div>
-    <div class="sub">GLOBAL STABILITY DIVISION</div>
-    <div class="status">SYSTEM STATUS: RESTRICTED ACCESS // EXTERNAL TRANSFER MONITORED</div>
-</header>
+<div class="topbar">
+    <div>SENTINEL NETWORK // GSD NODE-04</div>
+    <div class="alert">UNAUTHORIZED ACCESS MONITORED</div>
+</div>
 
-<main class="container">
+<div class="wrapper">
 
-    <section class="notice">
-        <b>WARNUNG:</b> Dieses Archiv enthält fragmentierte Einsatzberichte, beschädigte Zeitlinienverweise und Material mit ungeklärter Herkunft.
-        Unautorisierte Weitergabe kann operative Maßnahmen der Division auslösen.
+    <section class="hero flicker">
+        <div class="logo">SENTINEL INITIATIVE</div>
+        <div class="sub">GLOBAL STABILITY DIVISION</div>
+
+        <div class="operation">
+            <div class="opbox">
+                <span>OPERATION STATUS</span>
+                <b class="red">ACTIVE</b>
+            </div>
+            <div class="opbox">
+                <span>ARCHIVE ACCESS</span>
+                <b>BLACK VEIL</b>
+            </div>
+            <div class="opbox">
+                <span>REALITY DEVIATION</span>
+                <b class="red">ELEVATED</b>
+            </div>
+            <div class="opbox">
+                <span>FIB TRANSFER</span>
+                <b>PENDING</b>
+            </div>
+        </div>
     </section>
+
+    <h3 class="section-title">ACTIVE CASE FILES</h3>
 
     <section class="grid">
 
-        <a href="incident-77A.html">
-            <div class="file">
-                <h2>INCIDENT REPORT — SI-GSD-77A-Ω</h2>
-                <p>
-                    Nukleares U-Boot. Explosion ungeklärter Ursache.
-                    Mehrere Sensorwerte widersprechen der bekannten Ereignislinie.
-                </p>
-                <span class="tag">CLASSIFIED</span>
-            </div>
-        </a>
+    <!-- EINZIGE OFFENE AKTE -->
+    <a href="incident-77A.html">
+        <div class="card">
+            <h2>SI-GSD-77A-Ω</h2>
 
-        <div class="file">
-            <h2>xxx</h2>
             <p>
-            <span class="redacted">██████████████</span>
+                Nukleares U-Boot. Explosion unbekannter Herkunft.
+                Sensorwerte widersprechen der offiziellen Zeitlinie.
             </p>
-            <span class="tag">PENDING</span>
-        </div>
 
-        <div class="file">
-            <h2>xxx</h2>
-            <p>
-            <span class="redacted">██████████████</span>
-            </p>
-            <span class="tag">UNSTABLE</span>
+            <div class="stamp">AVAILABLE</div>
         </div>
+    </a>
 
-        <div class="file">
-            <h2>xxx</h2>
-            <p>
-            <span class="redacted">██████████████</span>
-            </p>
-            <span class="tag">REDACTED</span>
-        </div>
+    <!-- GESCHWÄRZTE AKTEN -->
 
-    </section>
+    <div class="card">
+        <h2>████████████</h2>
+
+        <p>
+            <span class="redacted">
+            Weibliche Quelle / Übergabeprotokoll / operative Verbindung
+            </span>
+        </p>
+
+        <div class="stamp">LOCKED</div>
+    </div>
+
+    <div class="card">
+        <h2>████████████</h2>
+
+        <p>
+            <span class="redacted">
+            Zeitlinienabweichung / Echo-Korrelation / Vorfallserie
+            </span>
+        </p>
+
+        <div class="stamp">RESTRICTED</div>
+    </div>
+
+    <div class="card">
+        <h2>████████████</h2>
+
+        <p>
+            <span class="redacted">
+            ECHO DIVISION Einsatzberichte und operative Einheiten
+            </span>
+        </p>
+
+        <div class="stamp">DENIED</div>
+    </div>
+
+</section>
+
+    <h3 class="section-title">OPERATION LOG</h3>
+
+    <div class="terminal">
+        <p>> Verbindung zu Sentinel-Knoten hergestellt...</p>
+        <p>> Archivintegrität: 64%</p>
+        <p>> Warnung: Fremdzugriff auf Datei SI-GSD-77A-Ω erkannt.</p>
+        <p>> Ursprungssignal: <span class="redacted">████████████████</span></p>
+        <p>> Empfehlung: Akte nicht als Wahrheit behandeln. Akte als Köder behandeln.</p>
+    </div>
 
     <div class="footer">
         Sentinel Initiative — Global Stability Division<br>
-        Archive integrity: 64% // Reality deviation index: elevated // Operator clearance required
+        Dieses System existiert offiziell nicht. Jede Einsichtnahme wurde protokolliert.
     </div>
 
-</main>
+</div>
 
 </body>
 </html>
