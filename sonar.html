@@ -65,6 +65,13 @@ input,button{
 <div id="info">SONAR PINGS RECOVERED: <span id="score">0</span>/5</div>
 <div id="dot"></div>
 
+<div id="done" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;background:#020202;z-index:10;text-align:center;padding:20px;">
+    <h1>SONAR RECOVERY COMPLETE</h1>
+    <p style="color:#ff6b6b;">RETURN CODE FOR TERMINAL:</p>
+    <p style="font-size:28px;letter-spacing:3px;color:#ff2b2b;">BLACK-441</p>
+    <button onclick="window.location.href='terminal.html'" style="margin-top:25px;">RETURN TO TERMINAL</button>
+</div>
+
 <script>
 let dot = document.getElementById("dot");
 let score = 0;
@@ -92,8 +99,8 @@ dot.onclick = function(){
     moveDot();
 
     if(score >= 5){
-        alert("SONAR RECOVERY COMPLETE\nRETURN CODE FOR TERMINAL: BLACK-441");
-        window.location.href = "terminal.html";
+        dot.style.display = "none";
+        document.getElementById("done").style.display = "flex";
     }
 }
 </script>
