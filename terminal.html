@@ -142,7 +142,7 @@ typeLines([
     '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
     'SENTINEL TERMINAL // BEREIT.',
     '',
-    'Tippe <span class="hi">help</span> für verfügbare Befehle.',
+    'Terminal bereit.',
     '',
 ], 'sys', 65);
 
@@ -199,7 +199,7 @@ const CMDS = {
     },
 
     '77a': function() {
-        typeLines(['', '> UNVOLLSTÄNDIGER BEFEHL.  Versuche: <span class="hi">recover 77a</span>', ''], 'warn', 55);
+        typeLines(['', '> UNVOLLSTÄNDIGER BEFEHL.', ''], 'warn', 55);
     },
 
     'open 77a': function() {
@@ -218,7 +218,7 @@ const CMDS = {
             '> ████████████████████ 100%',
             '> TEILZUGRIFF GEWÄHRT.',
             '',
-            '> SONAR ACCESS CODE: <span class="hi">DEPTH-3420</span>',
+            '> SONAR-RECOVERY: EXTERNER CODE ERFORDERLICH.',
             '',
             '> <a href="sonar.html">[ SONAR RECOVERY ÖFFNEN ]</a>',
             '',
@@ -229,9 +229,7 @@ const CMDS = {
         typeLines([
             '',
             '> Sonar-Rückkehrcode verifiziert.',
-            '> BLACKBOX ACCESS PASSWORD:',
-            '',
-            '> <span class="err" style="font-size:16px;letter-spacing:3px">REACTOR-77</span>',
+            '> BLACKBOX ACCESS: EXTERNER RECOVERY-CODE ERFORDERLICH.',
             '',
             '> <a href="access-incident.html">[ BLACKBOX ÖFFNEN ]</a>',
             '',
@@ -258,7 +256,7 @@ inp.addEventListener('keydown', function(e) {
         if (fn) {
             fn();
         } else if (raw) {
-            typeLines(['', '> BEFEHL NICHT ERKANNT.  Tippe <span class="hi">help</span>.', ''], 'err', 55);
+            typeLines(['', '> BEFEHL NICHT ERKANNT.', ''], 'err', 55);
         }
         return;
     }
