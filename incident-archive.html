@@ -2,34 +2,79 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>INCIDENT ARCHIVE</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-body{background:#030303;color:#ddd;font-family:'Share Tech Mono',monospace;padding:35px}
-.box{max-width:900px;margin:auto;border:1px solid #8b0000;padding:30px;background:#080808}
-h1{color:#ff2b2b}
-a{color:#999;text-decoration:none}
-a:hover{color:#ccc}
+*{box-sizing:border-box}
+body{
+    margin:0;background:#030303;color:#ddd;
+    font-family:'Share Tech Mono',monospace;
+    min-height:100vh;padding:35px;
+}
+body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:100;
+    background:repeating-linear-gradient(to bottom,rgba(255,255,255,.025),rgba(255,255,255,.025) 1px,transparent 1px,transparent 4px);
+}
+.box{max-width:980px;margin:auto;border:1px solid #8b0000;padding:30px;background:#080808;box-shadow:0 0 35px rgba(120,0,0,.25)}
+a{color:#999;text-decoration:none}a:hover{color:#ccc}
+h1{color:#ff2b2b;letter-spacing:3px;margin-bottom:5px}.sub{color:#777;margin-bottom:30px}
+.status{border:1px solid #242424;background:#050505;padding:14px;margin:18px 0;color:#aaa;line-height:1.5}.red{color:#ff2b2b}.ok{color:#79ff9b}.warn{color:#ffaa33}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:24px}.card{border:1px solid #2b2b2b;background:#050505;padding:18px;min-height:175px;position:relative}.card.unlocked{border-color:#8b0000}.card.locked{opacity:.62}.card h2{margin-top:0;color:#fff;font-size:18px}.card p{color:#aaa;font-size:14px;line-height:1.5}.stamp{position:absolute;bottom:14px;left:18px;border:1px solid #740000;color:#ff2b2b;padding:4px 8px;font-size:12px}.stamp.gray{border-color:#333;color:#777}.btn{display:inline-block;margin-top:8px;border:1px solid #8b0000;background:#120000;color:#fff;padding:10px 14px}.btn:hover{background:#240000;color:#fff}.footer{margin-top:28px;color:#555;font-size:12px;border-top:1px solid #222;padding-top:16px}
 </style>
 </head>
 <body>
 <div class="box">
     <a href="index.html">← RETURN TO DATABASE</a>
     <h1>INCIDENT ARCHIVE</h1>
-    <p>Zugriff bestätigt.</p>
-    <p>Die folgenden Daten wurden aus beschädigten Zeitlinienfragmenten rekonstruiert.</p>
-    <p>Weitere Inhalte folgen nach Freigabe.</p>
-</div>
+    <div class="sub">SI-GSD-77A-Ω // RECOVERY THREAD</div>
 
+    <div class="status">
+        <div>> Zugriff bestätigt.</div>
+        <div>> Externer Recovery-Code akzeptiert: <span class="ok">17340</span></div>
+        <div>> Archivintegrität: <span class="warn">17%</span></div>
+        <div>> Ein Audioblock wurde aus beschädigten Fragmenten rekonstruiert.</div>
+    </div>
+
+    <section class="grid">
+        <a href="tape-01.html">
+            <div class="card unlocked">
+                <h2>AUDIOFRAGMENT 01</h2>
+                <p>Wartungsband aus dem 77A-Komplex. Drei Stimmen. Fehlerhafte Zeitmarken. Unbekannter vierter Impuls am Ende der Aufnahme.</p>
+                <div class="stamp">UNLOCKED</div>
+            </div>
+        </a>
+
+        <div class="card locked">
+            <h2>AUDIOFRAGMENT 02</h2>
+            <p>Benötigt externen Datenträger.<br><br>Markierung: <span class="red">RECOVERY / ALPHA</span></p>
+            <div class="stamp gray">LOCKED</div>
+        </div>
+
+        <div class="card locked">
+            <h2>VIDEOFRAGMENT</h2>
+            <p>Wiedergabe nicht möglich.<br><br>Fehlende Hardware: <span class="red">VID-DECODER</span></p>
+            <div class="stamp gray">LOCKED</div>
+        </div>
+
+        <div class="card locked">
+            <h2>DATEI S_M17</h2>
+            <p>Dateiname wiederhergestellt. Inhalt beschädigt.<br><br>CRC-Fehler: <span class="red">91%</span></p>
+            <div class="stamp gray">CORRUPTED</div>
+        </div>
+    </section>
+
+    <div class="footer">
+        Roter Faden für weitere Freischaltungen: Datenträger → Stromzelle → Decoder → Admin-Key → vollständiger Sentinel-Terminalzugriff.<br>
+        Keine dieser Komponenten wird automatisch durch das Tablet gefunden. Physische Beweismittel erforderlich.
+    </div>
+</div>
 <script>
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         e.preventDefault();
-        if (window.parent !== window) {
-            window.parent.postMessage({ type: 'sentinel:back' }, '*');
-        } else {
-            history.back();
-        }
+        if (window.parent !== window) window.parent.postMessage({ type: 'sentinel:back' }, '*');
+        else history.back();
     }
 });
 </script>
