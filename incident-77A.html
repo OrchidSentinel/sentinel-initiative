@@ -4,210 +4,395 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SI-GSD-77A-Ω</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-
 <style>
-.terminal-access-box{
-    margin-top:35px;
-    padding:22px;
-    border:1px solid #8b0000;
-    background:
-        linear-gradient(90deg, rgba(120,0,0,.25), transparent),
-        #050505;
-    box-shadow:0 0 30px rgba(180,0,0,.25);
-    position:relative;
-    overflow:hidden;
-}
+/* ── Base ─────────────────────────────────────────────────── */
+body{margin:0;background:#040404;color:#d4d4d4;font-family:'Share Tech Mono',monospace;padding:35px}
+a{color:#b00000;text-decoration:none}
+.box{max-width:950px;margin:auto;border:1px solid #5c0000;padding:30px;background:#0a0a0a;box-shadow:0 0 25px rgba(120,0,0,.25)}
+h1{color:#b00000;letter-spacing:2px}
+.warning{color:#ff3333;border:1px solid #700;padding:12px;margin:20px 0}
+.redacted{background:#000;color:#000;padding:0 35px}
 
+/* ── Terminal access box ──────────────────────────────────── */
+.terminal-access-box{
+    margin-top:35px;padding:22px;border:1px solid #8b0000;
+    background:linear-gradient(90deg,rgba(120,0,0,.25),transparent),#050505;
+    box-shadow:0 0 30px rgba(180,0,0,.25);position:relative;overflow:hidden;
+}
 .terminal-access-box::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 12px,
-        rgba(255,0,0,.06) 13px
-    );
+    content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(90deg,transparent,transparent 12px,rgba(255,0,0,.06) 13px);
     animation:scanMove 2s linear infinite;
 }
-
-.terminal-warning{
-    color:#ff2b2b;
-    font-size:13px;
-    letter-spacing:2px;
-    margin-bottom:14px;
-    position:relative;
-    z-index:2;
-}
-
+.terminal-warning{color:#ff2b2b;font-size:13px;letter-spacing:2px;margin-bottom:14px;position:relative;z-index:2}
 .special-terminal{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:15px 22px;
-    border:1px solid #ff2b2b;
-    color:#fff;
-    background:#120000;
-    text-decoration:none;
-    letter-spacing:2px;
-    position:relative;
-    z-index:2;
-    box-shadow:0 0 20px rgba(255,0,0,.35);
-    transition:.2s;
+    display:inline-flex;align-items:center;gap:10px;
+    padding:15px 22px;border:1px solid #ff2b2b;color:#fff;background:#120000;
+    cursor:pointer;letter-spacing:2px;position:relative;z-index:2;
+    box-shadow:0 0 20px rgba(255,0,0,.35);transition:.2s;
+    font-family:'Share Tech Mono',monospace;font-size:14px;
 }
-
-.special-terminal:hover{
-    background:#250000;
-    transform:scale(1.03);
-    box-shadow:0 0 35px rgba(255,0,0,.65);
-}
-
+.special-terminal:hover{background:#250000;transform:scale(1.03);box-shadow:0 0 35px rgba(255,0,0,.65)}
 .pulse-dot{
-    width:10px;
-    height:10px;
-    background:#ff2b2b;
-    border-radius:50%;
-    box-shadow:0 0 12px #ff2b2b;
-    animation:pulse 1s infinite;
+    width:10px;height:10px;background:#ff2b2b;border-radius:50%;
+    box-shadow:0 0 12px #ff2b2b;animation:pulse 1s infinite;
+}
+.terminal-subtext{color:#777;margin-top:13px;font-size:12px;position:relative;z-index:2}
+@keyframes pulse{0%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.6)}100%{opacity:1;transform:scale(1)}}
+@keyframes scanMove{from{transform:translateX(-100px)}to{transform:translateX(100px)}}
+
+/* ── Image + zoom ─────────────────────────────────────────── */
+.doc-img-wrap{position:relative;margin-top:25px;display:inline-block;width:100%}
+.doc-img-wrap img{width:100%;border:1px solid #333;cursor:zoom-in;display:block;transition:filter .2s}
+.doc-img-wrap img:hover{filter:brightness(1.08)}
+.zoom-hint{
+    position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.7);
+    color:#888;font-family:'Share Tech Mono',monospace;font-size:11px;
+    padding:4px 10px;border:1px solid #333;pointer-events:none;
 }
 
-.terminal-subtext{
-    color:#777;
-    margin-top:13px;
-    font-size:12px;
-    position:relative;
-    z-index:2;
+/* ── Lightbox ─────────────────────────────────────────────── */
+#lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:8000;user-select:none}
+#lightbox.open{display:block}
+#lb-canvas{position:absolute;inset:0;overflow:hidden;cursor:grab}
+#lb-canvas.dragging{cursor:grabbing}
+#lb-img{position:absolute;transform-origin:center center;top:50%;left:50%;max-width:90vw;max-height:85vh}
+#lb-controls{
+    position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+    display:flex;align-items:center;gap:10px;
+    background:rgba(5,5,5,.9);border:1px solid #333;
+    padding:8px 16px;font-family:'Share Tech Mono',monospace;font-size:13px;color:#aaa;z-index:8001;
 }
+#lb-controls button{background:#111;border:1px solid #555;color:#ccc;cursor:pointer;padding:4px 12px;font-family:inherit;font-size:14px}
+#lb-controls button:hover{background:#222;border-color:#aaa;color:#fff}
+#lb-pct{min-width:52px;text-align:center;color:#fff}
+#lb-close{
+    position:fixed;top:16px;right:16px;background:rgba(5,5,5,.9);border:1px solid #5c0000;
+    color:#ff2b2b;cursor:pointer;font-family:'Share Tech Mono',monospace;
+    font-size:12px;letter-spacing:2px;padding:6px 14px;z-index:8001;
+}
+#lb-close:hover{background:rgba(100,0,0,.9);color:#fff}
 
-@keyframes pulse{
-    0%{opacity:1; transform:scale(1);}
-    50%{opacity:.4; transform:scale(1.6);}
-    100%{opacity:1; transform:scale(1);}
+/* ── Terminal popup ───────────────────────────────────────── */
+#term-overlay{
+    display:none;position:fixed;inset:0;
+    background:rgba(0,0,0,.65);
+    z-index:9000;
+    align-items:center;justify-content:center;
 }
+#term-overlay.open{display:flex}
 
-@keyframes scanMove{
-    from{transform:translateX(-100px);}
-    to{transform:translateX(100px);}
-}
-    
-.terminal-btn{
-    display:inline-block;
-    margin-top:25px;
-    padding:12px 18px;
-    border:1px solid #8b0000;
-    color:#ff2b2b;
-    text-decoration:none;
-    background:#050505;
-}
-
-.terminal-btn:hover{
-    background:#180000;
-}
-
-body{
-    margin:0;
-    background:#040404;
-    color:#d4d4d4;
-    font-family:'Share Tech Mono', monospace;
-    padding:35px;
-}
-
-a{
-    color:#b00000;
-    text-decoration:none;
-}
-
-.box{
-    max-width:950px;
-    margin:auto;
-    border:1px solid #5c0000;
-    padding:30px;
-    background:#0a0a0a;
-    box-shadow:0 0 25px rgba(120,0,0,.25);
-}
-
-h1{
-    color:#b00000;
-    letter-spacing:2px;
-}
-
-.warning{
-    color:#ff3333;
-    border:1px solid #700;
-    padding:12px;
-    margin:20px 0;
-}
-
-.redacted{
+#term-win{
+    width:min(740px,92vw);
+    height:min(540px,74vh);
     background:#000;
-    color:#000;
-    padding:0 35px;
+    border:1px solid #004422;
+    box-shadow:0 0 50px rgba(0,200,80,.12),0 20px 60px rgba(0,0,0,.95);
+    display:flex;flex-direction:column;
+    font-family:'Share Tech Mono','Courier New',monospace;
+    position:relative;
+}
+/* CRT scanlines on terminal */
+#term-win::before{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:50;
+    background:repeating-linear-gradient(
+        to bottom,rgba(0,240,100,.018),rgba(0,240,100,.018) 1px,transparent 1px,transparent 3px
+    );
 }
 
-img{
-    width:100%;
-    margin-top:25px;
-    border:1px solid #333;
+#term-titlebar{
+    flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+    padding:8px 14px;background:#050505;border-bottom:1px solid #003322;
+    color:#006633;font-size:11px;letter-spacing:2px;
+}
+#term-titlebar .t-left{display:flex;align-items:center;gap:8px}
+.t-led{width:7px;height:7px;background:#00cc55;border-radius:50%;box-shadow:0 0 6px #00cc55;animation:t-blink 1.6s ease-in-out infinite}
+@keyframes t-blink{0%,100%{opacity:1}50%{opacity:.25}}
+#term-x-btn{
+    background:none;border:1px solid #003322;color:#004422;
+    cursor:pointer;padding:2px 9px;font-family:inherit;font-size:13px;transition:.15s;
+}
+#term-x-btn:hover{background:rgba(0,100,50,.3);color:#00cc55;border-color:#005533}
+
+#term-output-wrap{
+    flex:1;overflow-y:auto;padding:16px 20px;font-size:13px;line-height:1.75;
+    scrollbar-width:thin;scrollbar-color:#003322 #000;
+}
+#term-output-wrap::-webkit-scrollbar{width:5px}
+#term-output-wrap::-webkit-scrollbar-track{background:#000}
+#term-output-wrap::-webkit-scrollbar-thumb{background:#003322}
+
+.tl{color:#00cc55}
+.tl.cmd{color:#009944}
+.tl.warn{color:#ffaa00}
+.tl.err{color:#ff3333}
+.tl.sys{color:#005533}
+.tl a{color:#ff4444;text-decoration:none}
+.tl a:hover{text-decoration:underline}
+.tl .hi{color:#00ffaa;font-weight:bold}
+
+#term-input-row{
+    flex-shrink:0;display:flex;align-items:center;
+    padding:10px 20px;border-top:1px solid #002211;background:#000;gap:8px;
+}
+#term-prompt{color:#009944;font-size:13px;white-space:nowrap}
+#term-cmd{
+    flex:1;background:transparent;border:none;color:#00e060;
+    font-family:inherit;font-size:13px;outline:none;caret-color:#00e060;
 }
 </style>
 </head>
-
 <body>
 
 <div class="box">
+    <a href="index.html">← RETURN TO SENTINEL DATABASE</a>
+    <h1>INCIDENT REPORT — SI-GSD-77A-Ω</h1>
+    <div class="warning">CLASSIFICATION: BLACK VEIL // GLOBAL STABILITY DIVISION</div>
 
-<a href="index.html">← RETURN TO SENTINEL DATABASE</a>
+    <p>Ein nukleares Unterseeboot wurde nach einer nicht vollständig erklärbaren Explosion aus der bekannten Ereigniskette entfernt. Offizielle Stellen führen den Vorfall auf technische Instabilität zurück.</p>
+    <p>Interne Sentinel-Auswertung widerspricht dieser Annahme teilweise. Die Aufzeichnungen zeigen mehrere Sekunden Messdaten, die laut Zeitstempel nie hätten existieren dürfen.</p>
+    <p>Mögliche Verbindung zu <span class="redacted">██████████</span>, den sogenannten Gestalten und einer beschädigten Zeitlinie wird geprüft. Eine direkte Schuldzuweisung ist zum aktuellen Zeitpunkt nicht zulässig.</p>
+    <p>Die ursprüngliche Akte wurde durch eine unbekannte weibliche Quelle entwendet. Identität ungeklärt.</p>
 
-<h1>INCIDENT REPORT — SI-GSD-77A-Ω</h1>
+    <div class="warning">HINWEIS: Originalakte als Scan beigefügt. <span style="color:#777;font-size:12px">[ Klicken zum Vergrößern ]</span></div>
 
-<div class="warning">
-CLASSIFICATION: BLACK VEIL // GLOBAL STABILITY DIVISION
-</div>
+    <div class="doc-img-wrap">
+        <img id="doc-img" src="akte-u-boot.png" alt="Originalakte SI-GSD-77A">
+        <div class="zoom-hint">🔍 Klick zum Zoomen</div>
+    </div>
 
-<p>
-Ein nukleares Unterseeboot wurde nach einer nicht vollständig erklärbaren Explosion aus der bekannten Ereigniskette entfernt.
-Offizielle Stellen führen den Vorfall auf technische Instabilität zurück.
-</p>
-
-<p>
-Interne Sentinel-Auswertung widerspricht dieser Annahme teilweise.
-Die Aufzeichnungen zeigen mehrere Sekunden Messdaten, die laut Zeitstempel nie hätten existieren dürfen.
-</p>
-
-<p>
-Mögliche Verbindung zu <span class="redacted">██████████</span>,
-den sogenannten Gestalten und einer beschädigten Zeitlinie wird geprüft.
-Eine direkte Schuldzuweisung ist zum aktuellen Zeitpunkt nicht zulässig.
-</p>
-
-<p>
-Die ursprüngliche Akte wurde durch eine unbekannte weibliche Quelle entwendet.
-Identität ungeklärt.
-</p>
-
-<div class="warning">
-HINWEIS: Originalakte wurde als PNG hier eingefügt.
-</div>
-
-<img src="akte-u-boot.png" alt="Originalakte SI-GSD-77A">
-
-
-<div class="terminal-access-box">
-    <div class="terminal-warning">RESTRICTED SYSTEM LINK DETECTED</div>
-
-    <a class="terminal-btn special-terminal" href="terminal.html">
-        <span class="pulse-dot"></span>
-        OPEN SENTINEL TERMINAL
-    </a>
-
-    <div class="terminal-subtext">
-        External recovery protocol required // Node access unstable
+    <div class="terminal-access-box">
+        <div class="terminal-warning">RESTRICTED SYSTEM LINK DETECTED</div>
+        <button class="special-terminal" onclick="openTerminal()">
+            <span class="pulse-dot"></span>
+            OPEN SENTINEL TERMINAL
+        </button>
+        <div class="terminal-subtext">External recovery protocol required // Node access unstable</div>
     </div>
 </div>
 
+<!-- ── Lightbox ─────────────────────────────────────────── -->
+<div id="lightbox">
+    <button id="lb-close">[ SCHLIESSEN ]</button>
+    <div id="lb-canvas">
+        <img id="lb-img" src="akte-u-boot.png" alt="Akte Zoom" draggable="false">
+    </div>
+    <div id="lb-controls">
+        <button id="lb-out">−</button>
+        <span id="lb-pct">100%</span>
+        <button id="lb-in">+</button>
+        <button id="lb-reset">RESET</button>
+    </div>
 </div>
+
+<!-- ── Terminal Popup ──────────────────────────────────────── -->
+<div id="term-overlay">
+    <div id="term-win">
+        <div id="term-titlebar">
+            <div class="t-left">
+                <span class="t-led"></span>
+                SENTINEL TERMINAL // GSD NODE-04
+            </div>
+            <button id="term-x-btn" onclick="closeTerminal()">✕</button>
+        </div>
+        <div id="term-output-wrap"><div id="term-output"></div></div>
+        <div id="term-input-row">
+            <span id="term-prompt">sentinel@gsd:~$&nbsp;</span>
+            <input id="term-cmd" autocomplete="off" spellcheck="false">
+        </div>
+    </div>
+</div>
+
+<script>
+// ══ Lightbox ═══════════════════════════════════════════════
+const lb     = document.getElementById('lightbox');
+const lbCvs  = document.getElementById('lb-canvas');
+const lbImg  = document.getElementById('lb-img');
+const pctEl  = document.getElementById('lb-pct');
+let lbScale  = 1, lbOx = 0, lbOy = 0, lbDrag = false, lbDsx, lbDsy;
+
+function lbUpdate() {
+    lbImg.style.transform = `translate(-50%,-50%) translate(${lbOx}px,${lbOy}px) scale(${lbScale})`;
+    pctEl.textContent = Math.round(lbScale * 100) + '%';
+}
+function openLightbox()  { lbScale=1;lbOx=0;lbOy=0;lbUpdate();lb.classList.add('open'); }
+function closeLightbox() { lb.classList.remove('open'); }
+
+document.getElementById('doc-img').addEventListener('click', openLightbox);
+document.getElementById('lb-close').addEventListener('click', closeLightbox);
+document.getElementById('lb-in').addEventListener('click',    function(){ lbScale=Math.min(10,lbScale*1.25);lbUpdate(); });
+document.getElementById('lb-out').addEventListener('click',   function(){ lbScale=Math.max(0.2,lbScale/1.25);lbUpdate(); });
+document.getElementById('lb-reset').addEventListener('click', function(){ lbScale=1;lbOx=0;lbOy=0;lbUpdate(); });
+
+lbCvs.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    const rect=lbCvs.getBoundingClientRect();
+    const mx=e.clientX-rect.left-rect.width/2, my=e.clientY-rect.top-rect.height/2;
+    const d=e.deltaY<0?1.12:1/1.12;
+    const ns=Math.min(10,Math.max(0.2,lbScale*d));
+    lbOx=mx-(mx-lbOx)*(ns/lbScale); lbOy=my-(my-lbOy)*(ns/lbScale);
+    lbScale=ns; lbUpdate();
+}, {passive:false});
+
+lbCvs.addEventListener('mousedown', function(e) {
+    if(e.target===lbImg||e.target===lbCvs){ lbDrag=true;lbDsx=e.clientX-lbOx;lbDsy=e.clientY-lbOy;lbCvs.classList.add('dragging');e.preventDefault(); }
+});
+window.addEventListener('mousemove', function(e){ if(!lbDrag)return;lbOx=e.clientX-lbDsx;lbOy=e.clientY-lbDsy;lbUpdate(); });
+window.addEventListener('mouseup',   function(){  lbDrag=false;lbCvs.classList.remove('dragging'); });
+
+// ══ Terminal Popup ══════════════════════════════════════════
+const termOverlay = document.getElementById('term-overlay');
+const termOut     = document.getElementById('term-output');
+const termInp     = document.getElementById('term-cmd');
+let termBooted    = false;
+let termHistory   = [], termHistIdx = -1;
+
+function openTerminal() {
+    termOverlay.classList.add('open');
+    setTimeout(function(){ termInp.focus(); }, 50);
+    if (!termBooted) { termBooted = true; bootTerminal(); }
+}
+function closeTerminal() {
+    termInp.blur();
+    termOverlay.classList.remove('open');
+}
+
+function tLine(html, cls) {
+    const d = document.createElement('div');
+    d.className = 'tl' + (cls ? ' ' + cls : '');
+    d.innerHTML = html;
+    termOut.appendChild(d);
+    termOut.parentElement.scrollTop = termOut.parentElement.scrollHeight;
+}
+function tType(lines, cls, delay, done) {
+    (function next(i){
+        if(i>=lines.length){ if(done)done(); return; }
+        tLine(lines[i], cls);
+        setTimeout(function(){ next(i+1); }, delay||65);
+    })(0);
+}
+
+function bootTerminal() {
+    tType([
+        '> Verbindung zu Sentinel-Knoten wird aufgebaut...',
+        '> Authentifizierung läuft...',
+        '> Archivintegrität: <span class="hi">64%</span>',
+        '> Warnung: Fremdzugriff erkannt — Quelle: <span style="color:#ff8800">UNBEKANNT</span>',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        'SENTINEL TERMINAL // BEREIT.',
+        '',
+        'Tippe <span class="hi">help</span> für verfügbare Befehle.',
+        '',
+    ], 'sys', 60);
+}
+
+const TCMDS = {
+    help: function(){
+        tType([
+            '','VERFÜGBARE BEFEHLE:',
+            '  <span class="hi">help</span>           — Diese Übersicht',
+            '  <span class="hi">scan</span>           — Aktive Vorfälle durchsuchen',
+            '  <span class="hi">recover [id]</span>   — Wiederherstellungsprotokoll',
+            '  <span class="hi">status</span>         — Knotenstatus',
+            '  <span class="hi">clear</span>          — Terminal leeren',
+            '  <span class="hi">exit</span>           — Terminal schließen',
+            '',
+        ],'sys',35);
+    },
+    scan: function(){
+        tType(['','> Scanning Sentinel-Knoten...','> ████████████████████ 100%',
+            '> AKTIVER VORFALL: <span class="err">SI-GSD-77A-Ω</span>',
+            '> Status: <span class="warn">UNGELÖST</span>',''],null,100);
+    },
+    status: function(){
+        tType(['',
+            '> NODE:         GSD-04  [<span class="hi">ONLINE</span>]',
+            '> ARCHIV:       64% INTEGRITÄT',
+            '> OFFENE AKTEN: 1',
+            '> ZUGRIFFSSTUFE: <span class="warn">ORCHID</span>',
+            '> FIB-TRANSFER: <span class="err">GESPERRT</span>',''],
+        'sys',55);
+    },
+    clear: function(){ termOut.innerHTML=''; },
+    exit:  function(){
+        tType(['','> Verbindung wird getrennt...',''],'sys',55);
+        setTimeout(closeTerminal,600);
+    },
+    '77a': function(){
+        tType(['','> UNVOLLSTÄNDIGER BEFEHL. Versuche: <span class="hi">recover 77a</span>',''],'warn',55);
+    },
+    'open 77a': function(){
+        tType(['','> DIREKTZUGRIFF VERWEIGERT.','> Recovery-Protokoll erforderlich.',''],'err',75);
+    },
+    'recover 77a': function(){
+        tType(['',
+            '> Lade Wiederherstellungsprotokoll für SI-GSD-77A-Ω...',
+            '> ████████████████████ 100%',
+            '> TEILZUGRIFF GEWÄHRT.',
+            '',
+            '> SONAR ACCESS CODE: <span class="hi">DEPTH-3420</span>',
+            '',
+            '> <a href="sonar.html">[ SONAR RECOVERY ÖFFNEN ]</a>',
+            '',
+        ],null,90);
+    },
+    'black-441': function(){
+        tType(['',
+            '> Sonar-Rückkehrcode verifiziert.',
+            '> BLACKBOX ACCESS PASSWORD:',
+            '',
+            '> <span class="err" style="font-size:15px;letter-spacing:3px">REACTOR-77</span>',
+            '',
+            '> <a href="access-incident.html">[ BLACKBOX ÖFFNEN ]</a>',
+            '',
+        ],null,90);
+    },
+};
+
+termInp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        const raw = termInp.value.trim();
+        termInp.value = ''; termHistIdx = -1;
+        if (raw) { termHistory.unshift(raw); if(termHistory.length>100)termHistory.pop(); }
+        const disp = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        tLine('&gt; '+disp,'cmd');
+        const fn = TCMDS[raw.toLowerCase()];
+        if (fn) fn();
+        else if (raw) tType(['','> BEFEHL NICHT ERKANNT. Tippe <span class="hi">help</span>.',''],'err',55);
+        return;
+    }
+    if (e.key === 'ArrowUp')   { e.preventDefault(); if(termHistIdx<termHistory.length-1) termInp.value=termHistory[++termHistIdx]||''; return; }
+    if (e.key === 'ArrowDown') { e.preventDefault(); termHistIdx>0 ? (termInp.value=termHistory[--termHistIdx]||'') : (termHistIdx=-1,termInp.value=''); return; }
+    if (e.key === 'Escape') {
+        e.preventDefault();
+        if (termInp.value.trim() !== '') { termInp.value=''; termHistIdx=-1; }
+        else { closeTerminal(); }
+    }
+});
+
+// Click inside popup → focus input
+document.getElementById('term-win').addEventListener('click', function(e) {
+    if (e.target !== document.getElementById('term-x-btn') && !e.target.closest('a')) termInp.focus();
+});
+
+// ══ ESC routing ════════════════════════════════════════════
+document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Escape') return;
+    e.preventDefault();
+    if (lb.classList.contains('open')) { closeLightbox(); return; }
+    if (termOverlay.classList.contains('open')) {
+        if (termInp.value.trim() !== '') { termInp.value=''; termHistIdx=-1; }
+        else { closeTerminal(); }
+        return;
+    }
+    if (window.parent !== window) {
+        window.parent.postMessage({ type: 'sentinel:back' }, '*');
+    } else {
+        history.back();
+    }
+});
+</script>
 
 </body>
 </html>

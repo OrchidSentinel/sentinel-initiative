@@ -3,104 +3,75 @@
 <head>
 <meta charset="UTF-8">
 <title>Clearance Required</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-
 <style>
 body{
-    margin:0;
-    background:#020202;
-    color:#e5e5e5;
-    font-family:'Share Tech Mono', monospace;
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    margin:0;background:#020202;color:#e5e5e5;
+    font-family:'Share Tech Mono',monospace;
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
 }
-
 .panel{
-    width:90%;
-    max-width:650px;
-    border:1px solid #8b0000;
-    background:#070707;
-    padding:35px;
-    box-shadow:0 0 35px rgba(140,0,0,.35);
+    width:90%;max-width:650px;
+    border:1px solid #8b0000;background:#070707;
+    padding:35px;box-shadow:0 0 35px rgba(140,0,0,.35);
 }
-
-h1{
-    color:#ff2b2b;
-    letter-spacing:3px;
-}
-
+h1{color:#ff2b2b;letter-spacing:3px}
 input{
-    width:100%;
-    background:#000;
-    color:#fff;
-    border:1px solid #8b0000;
-    padding:14px;
-    font-family:inherit;
-    font-size:16px;
-    margin-top:20px;
+    width:100%;background:#000;color:#fff;
+    border:1px solid #8b0000;padding:14px;
+    font-family:inherit;font-size:16px;margin-top:20px;
+    outline:none;
 }
-
+input:focus{border-color:#cc0000}
 button{
-    margin-top:15px;
-    background:#8b0000;
-    color:white;
-    border:none;
-    padding:12px 18px;
-    font-family:inherit;
-    cursor:pointer;
+    margin-top:15px;background:#8b0000;color:white;
+    border:none;padding:12px 18px;font-family:inherit;cursor:pointer;
 }
-
-button:hover{
-    background:#b00000;
-}
-
-.error{
-    margin-top:18px;
-    color:#ff2b2b;
-}
-
-.back{
-    margin-top:25px;
-    display:block;
-    color:#777;
-    text-decoration:none;
-}
+button:hover{background:#b00000}
+.error{margin-top:18px;color:#ff2b2b}
+.back{margin-top:25px;display:block;color:#777;text-decoration:none}
+.back:hover{color:#aaa}
 </style>
 </head>
-
 <body>
 
 <div class="panel">
     <h1>CLEARANCE REQUIRED</h1>
-
-    <p>
-        Zugriff auf diese Datei wurde eingeschränkt.
-        Geben Sie den autorisierten Sentinel-Code ein.
-    </p>
-
+    <p>Zugriff auf diese Datei wurde eingeschränkt. Geben Sie den autorisierten Sentinel-Code ein.</p>
     <input id="password" type="password" placeholder="ACCESS CODE">
-
     <button onclick="checkPassword()">VERIFY CLEARANCE</button>
-
     <div id="error" class="error"></div>
-
     <a class="back" href="index.html">← RETURN TO DATABASE</a>
 </div>
 
 <script>
-function checkPassword(){
-    const password = document.getElementById("password").value;
+function checkPassword() {
+    const pw = document.getElementById('password').value;
+    if (pw === 'REACTOR-77') {
+        window.location.href = 'incident-archive.html';
+    } else {
+        document.getElementById('error').innerText = 'ACCESS DENIED // Versuch wurde protokolliert.';
+    }
+}
 
-    if(password === "REACTOR-77"){
-    window.location.href = "incident-archive.html";
-}else{
-    document.getElementById("error").innerText =
-    "ACCESS DENIED // Versuch wurde protokolliert.";
-}
-}
+document.getElementById('password').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') checkPassword();
+});
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        e.preventDefault();
+        // If password field is focused and has content, just blur it; else go back
+        const pw = document.getElementById('password');
+        if (document.activeElement === pw && pw.value !== '') {
+            pw.blur();
+        } else if (window.parent !== window) {
+            window.parent.postMessage({ type: 'sentinel:back' }, '*');
+        } else {
+            history.back();
+        }
+    }
+});
 </script>
 
 </body>

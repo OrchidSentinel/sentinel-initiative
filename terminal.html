@@ -3,109 +3,296 @@
 <head>
 <meta charset="UTF-8">
 <title>Sentinel Terminal</title>
-
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
+*{box-sizing:border-box;margin:0;padding:0}
+
 body{
-    background:black;
-    color:#00ff66;
-    font-family:Courier New;
-    padding:30px;
+    background:#000;
+    color:#00e060;
+    font-family:'Share Tech Mono','Courier New',monospace;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
 }
-#output{
-    white-space:pre-line;
-    margin-bottom:20px;
+
+/* CRT scanlines */
+body::before{
+    content:"";
+    position:fixed;inset:0;
+    background:repeating-linear-gradient(
+        to bottom,
+        rgba(0,240,100,.018),rgba(0,240,100,.018) 1px,
+        transparent 1px,transparent 3px
+    );
+    pointer-events:none;z-index:100;
 }
-input{
-    width:100%;
-    background:black;
-    border:1px solid #00ff66;
-    color:#00ff66;
-    padding:12px;
-    font-size:18px;
+
+#topbar{
+    flex-shrink:0;
+    background:#000;
+    border-bottom:1px solid #004422;
+    padding:7px 20px;
+    font-size:11px;
+    color:#006633;
+    display:flex;
+    justify-content:space-between;
+    letter-spacing:2px;
+}
+
+#output-wrap{
+    flex:1;
+    overflow-y:auto;
+    padding:18px 22px;
+    font-size:14px;
+    line-height:1.75;
+    scrollbar-width:thin;
+    scrollbar-color:#003322 #000;
+}
+#output-wrap::-webkit-scrollbar{width:5px}
+#output-wrap::-webkit-scrollbar-track{background:#000}
+#output-wrap::-webkit-scrollbar-thumb{background:#003322}
+
+.ln{color:#00cc55}
+.ln.cmd{color:#009944}
+.ln.warn{color:#ffaa00}
+.ln.err{color:#ff3333}
+.ln.sys{color:#006633}
+.ln a{color:#ff4444;text-decoration:none}
+.ln a:hover{text-decoration:underline}
+.ln .hi{color:#00ffaa;font-weight:bold}
+
+#input-row{
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    padding:11px 22px;
+    border-top:1px solid #003322;
+    background:#000;
+    gap:8px;
+}
+
+#prompt{color:#00aa44;font-size:14px;white-space:nowrap}
+
+#cmd-input{
+    flex:1;
+    background:transparent;
+    border:none;
+    color:#00e060;
+    font-family:inherit;
+    font-size:14px;
     outline:none;
+    caret-color:#00e060;
 }
-a{ color:red; }
+
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 </style>
 </head>
-
 <body>
 
-<a href="index.html" style="color:#00ff66;display:inline-block;margin-bottom:22px;text-decoration:none;">&larr; RETURN TO SENTINEL DATABASE</a>
-
-<div id="output">
-SENTINEL TERMINAL // GSD NODE
-
-AVAILABLE COMMANDS:
-- help
-- scan
-- clear
-
---------------------------------
-
-> INCIDENT FILE DETECTED:
-SI-GSD-77A-Ω
-
-> NOTE:
-The file cannot be recovered directly.
-
-> Hint:
-Use the incident designation.
-Do not include symbols.
+<div id="topbar">
+    <span>SENTINEL TERMINAL // GSD NODE-04</span>
+    <span id="ts-display"></span>
 </div>
 
-<input id="command" autofocus placeholder="ENTER COMMAND">
+<div id="output-wrap"><div id="output"></div></div>
+
+<div id="input-row">
+    <span id="prompt">sentinel@gsd:~$&nbsp;</span>
+    <input id="cmd-input" autocomplete="off" spellcheck="false">
+</div>
 
 <script>
-const input = document.getElementById("command");
-const output = document.getElementById("output");
+const out   = document.getElementById('output');
+const inp   = document.getElementById('cmd-input');
+const tsEl  = document.getElementById('ts-display');
 
-input.addEventListener("keydown", function(e){
-    if(e.key === "Enter"){
-        let cmd = input.value.trim().toLowerCase();
-        output.innerHTML += "\n\n> " + cmd;
+// Timestamp
+setInterval(function() {
+    tsEl.textContent = new Date().toUTCString().replace('GMT', 'UTC');
+}, 1000);
+tsEl.textContent = new Date().toUTCString().replace('GMT', 'UTC');
 
-        if(cmd === "recover 77a"){
-            output.innerHTML += `
-<br><br>PARTIAL ACCESS GRANTED.
-<br>SONAR ACCESS CODE: DEPTH-3420
-<br><br><a href="sonar.html">OPEN SONAR RECOVERY</a>`;
+// ── Output helpers ──────────────────────────────────────────
+function addLine(html, cls) {
+    const d = document.createElement('div');
+    d.className = 'ln' + (cls ? ' ' + cls : '');
+    d.innerHTML = html;
+    out.appendChild(d);
+    out.parentElement.scrollTop = out.parentElement.scrollHeight;
+    return d;
+}
+
+// Print lines with typewriter delay
+function typeLines(lines, cls, delay, done) {
+    (function next(i) {
+        if (i >= lines.length) { if (done) done(); return; }
+        addLine(lines[i], cls);
+        setTimeout(function() { next(i + 1); }, delay || 70);
+    })(0);
+}
+
+// ── Boot sequence ────────────────────────────────────────────
+typeLines([
+    '> Verbindung zu Sentinel-Knoten wird aufgebaut...',
+    '> Authentifizierung läuft...',
+    '> Archivintegrität: <span class="hi">64%</span>',
+    '> Warnung: Fremdzugriff erkannt — Quelle: <span style="color:#ff8800">UNBEKANNT</span>',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    'SENTINEL TERMINAL // BEREIT.',
+    '',
+    'Tippe <span class="hi">help</span> für verfügbare Befehle.',
+    '',
+], 'sys', 65);
+
+// ── Command history ──────────────────────────────────────────
+let cmdHistory = [];
+let histIdx    = -1;
+
+// ── Commands ─────────────────────────────────────────────────
+const CMDS = {
+    help: function() {
+        typeLines([
+            '',
+            'VERFÜGBARE BEFEHLE:',
+            '  <span class="hi">help</span>              — Diese Übersicht',
+            '  <span class="hi">scan</span>              — Aktive Vorfälle durchsuchen',
+            '  <span class="hi">recover [id]</span>      — Wiederherstellungsprotokoll starten',
+            '  <span class="hi">status</span>            — Knotenstatus abrufen',
+            '  <span class="hi">clear</span>             — Terminal leeren',
+            '  <span class="hi">back</span>              — Zur Datenbank zurück',
+            '',
+        ], 'sys', 35);
+    },
+
+    scan: function() {
+        typeLines([
+            '',
+            '> Scanning Sentinel-Knoten...',
+            '> ████████████████████ 100%',
+            '> AKTIVER VORFALL GEFUNDEN: <span class="err">SI-GSD-77A-Ω</span>',
+            '> Status: <span class="warn">UNGELÖST</span>',
+            '',
+        ], null, 100);
+    },
+
+    status: function() {
+        typeLines([
+            '',
+            '> NODE:         GSD-04  [<span class="hi">ONLINE</span>]',
+            '> ARCHIV:       64% INTEGRITÄT',
+            '> OFFENE AKTEN: 1',
+            '> ZUGRIFFSSTUFE: <span class="warn">ORCHID</span>',
+            '> FIB-TRANSFER: <span class="err">GESPERRT</span>',
+            '',
+        ], 'sys', 55);
+    },
+
+    clear: function() {
+        out.innerHTML = '';
+    },
+
+    back: function() {
+        typeLines(['', '> Verbindung wird getrennt...', ''], 'sys', 55);
+        setTimeout(function() { window.location.href = 'index.html'; }, 700);
+    },
+
+    '77a': function() {
+        typeLines(['', '> UNVOLLSTÄNDIGER BEFEHL.  Versuche: <span class="hi">recover 77a</span>', ''], 'warn', 55);
+    },
+
+    'open 77a': function() {
+        typeLines([
+            '',
+            '> DIREKTZUGRIFF VERWEIGERT.',
+            '> Recovery-Protokoll erforderlich.',
+            '',
+        ], 'err', 75);
+    },
+
+    'recover 77a': function() {
+        typeLines([
+            '',
+            '> Lade Wiederherstellungsprotokoll für SI-GSD-77A-Ω...',
+            '> ████████████████████ 100%',
+            '> TEILZUGRIFF GEWÄHRT.',
+            '',
+            '> SONAR ACCESS CODE: <span class="hi">DEPTH-3420</span>',
+            '',
+            '> <a href="sonar.html">[ SONAR RECOVERY ÖFFNEN ]</a>',
+            '',
+        ], null, 90);
+    },
+
+    'black-441': function() {
+        typeLines([
+            '',
+            '> Sonar-Rückkehrcode verifiziert.',
+            '> BLACKBOX ACCESS PASSWORD:',
+            '',
+            '> <span class="err" style="font-size:16px;letter-spacing:3px">REACTOR-77</span>',
+            '',
+            '> <a href="access-incident.html">[ BLACKBOX ÖFFNEN ]</a>',
+            '',
+        ], null, 90);
+    },
+};
+
+// ── Input handler ─────────────────────────────────────────────
+inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        const raw = inp.value.trim();
+        inp.value = '';
+        histIdx   = -1;
+
+        if (raw) {
+            cmdHistory.unshift(raw);
+            if (cmdHistory.length > 100) cmdHistory.pop();
         }
 
-        else if(cmd === "open 77a"){
-            output.innerHTML += `<br><br>DIRECT FILE ACCESS DENIED.<br>RECOVERY PROTOCOL REQUIRED.`;
-        }
+        const display = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        addLine('&gt; ' + display, 'cmd');
 
-        else if(cmd === "77a"){
-            output.innerHTML += `<br><br>INCOMPLETE COMMAND.`;
+        const fn = CMDS[raw.toLowerCase()];
+        if (fn) {
+            fn();
+        } else if (raw) {
+            typeLines(['', '> BEFEHL NICHT ERKANNT.  Tippe <span class="hi">help</span>.', ''], 'err', 55);
         }
+        return;
+    }
 
-        else if(cmd === "help"){
-            output.innerHTML += `<br><br>AVAILABLE:<br>- scan<br>- clear<br>- recover [incident]`;
+    if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (histIdx < cmdHistory.length - 1) inp.value = cmdHistory[++histIdx] || '';
+        return;
+    }
+
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (histIdx > 0)     { inp.value = cmdHistory[--histIdx] || ''; }
+        else                 { histIdx = -1; inp.value = ''; }
+        return;
+    }
+
+    // ESC: clear input if not empty, else go back (back → index → close NUI)
+    if (e.key === 'Escape') {
+        e.preventDefault();
+        if (inp.value.trim() !== '') {
+            inp.value = '';
+            histIdx   = -1;
+        } else if (window.parent !== window) {
+            window.parent.postMessage({ type: 'sentinel:back' }, '*');
+        } else {
+            history.back();
         }
-
-        else if(cmd === "scan"){
-            output.innerHTML += `<br><br>ACTIVE INCIDENT FOUND: SI-GSD-77A-Ω`;
-        }
-
-        else if(cmd === "clear"){
-            output.innerHTML = "SENTINEL TERMINAL // GSD NODE";
-        }
-
-        else if(cmd === "black-441"){
-            output.innerHTML += `
-<br><br>SONAR RETURN VERIFIED.
-<br>BLACKBOX ACCESS PASSWORD:
-<br><br>REACTOR-77
-<br><br><a href="access-incident.html">OPEN BLACKBOX ACCESS</a>`;
-        }
-
-        else{
-            output.innerHTML += `<br><br>COMMAND NOT RECOGNIZED.`;
-        }
-
-        input.value = "";
     }
 });
+
+// Click anywhere → focus input
+document.addEventListener('click', function() { inp.focus(); });
+inp.focus();
 </script>
 
 </body>

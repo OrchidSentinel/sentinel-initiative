@@ -4,53 +4,34 @@
 <meta charset="UTF-8">
 <title>INCIDENT ARCHIVE</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-
 <style>
-body{
-    background:#030303;
-    color:#ddd;
-    font-family:'Share Tech Mono', monospace;
-    padding:35px;
-}
-
-.box{
-    max-width:900px;
-    margin:auto;
-    border:1px solid #8b0000;
-    padding:30px;
-    background:#080808;
-}
-
-h1{
-    color:#ff2b2b;
-}
-
-a{
-    color:#999;
-    text-decoration:none;
-}
+body{background:#030303;color:#ddd;font-family:'Share Tech Mono',monospace;padding:35px}
+.box{max-width:900px;margin:auto;border:1px solid #8b0000;padding:30px;background:#080808}
+h1{color:#ff2b2b}
+a{color:#999;text-decoration:none}
+a:hover{color:#ccc}
 </style>
 </head>
-
 <body>
-
 <div class="box">
     <a href="index.html">← RETURN TO DATABASE</a>
-
     <h1>INCIDENT ARCHIVE</h1>
-
-    <p>
-        Zugriff bestätigt.
-    </p>
-
-    <p>
-        Die folgenden Daten wurden aus beschädigten Zeitlinienfragmenten rekonstruiert.
-    </p>
-
-    <p>
-        Weitere Inhalte folgen nach Freigabe.
-    </p>
+    <p>Zugriff bestätigt.</p>
+    <p>Die folgenden Daten wurden aus beschädigten Zeitlinienfragmenten rekonstruiert.</p>
+    <p>Weitere Inhalte folgen nach Freigabe.</p>
 </div>
 
+<script>
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        e.preventDefault();
+        if (window.parent !== window) {
+            window.parent.postMessage({ type: 'sentinel:back' }, '*');
+        } else {
+            history.back();
+        }
+    }
+});
+</script>
 </body>
 </html>

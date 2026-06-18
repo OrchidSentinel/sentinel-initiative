@@ -4,47 +4,33 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sentinel Initiative</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-
 <style>
 *{box-sizing:border-box}
-
 body{
     margin:0;
     min-height:100vh;
     background:#020202;
     color:#e5e5e5;
-    font-family:'Share Tech Mono', monospace;
+    font-family:'Share Tech Mono',monospace;
     overflow-x:hidden;
 }
-
-/* Scanlines */
 body::before{
     content:"";
     position:fixed;
     inset:0;
-    background:repeating-linear-gradient(
-        to bottom,
-        rgba(255,255,255,.035),
-        rgba(255,255,255,.035) 1px,
-        transparent 1px,
-        transparent 4px
-    );
+    background:repeating-linear-gradient(to bottom,rgba(255,255,255,.035),rgba(255,255,255,.035) 1px,transparent 1px,transparent 4px);
     pointer-events:none;
     z-index:999;
 }
-
-/* Dark vignette */
 body::after{
     content:"";
     position:fixed;
     inset:0;
-    background:radial-gradient(circle, transparent 45%, rgba(0,0,0,.9));
+    background:radial-gradient(circle,transparent 45%,rgba(0,0,0,.9));
     pointer-events:none;
     z-index:998;
 }
-
 .topbar{
     display:flex;
     justify-content:space-between;
@@ -55,80 +41,37 @@ body::after{
     font-size:13px;
     color:#999;
 }
-
-.alert{
-    color:#ff2b2b;
-}
-
-.wrapper{
-    max-width:1200px;
-    margin:auto;
-    padding:35px;
-}
-
+.alert{color:#ff2b2b}
+.wrapper{max-width:1200px;margin:auto;padding:35px}
 .hero{
     border:1px solid #790000;
-    background:
-        linear-gradient(135deg, rgba(120,0,0,.18), transparent 40%),
-        #080808;
+    background:linear-gradient(135deg,rgba(120,0,0,.18),transparent 40%),#080808;
     padding:35px;
     box-shadow:0 0 35px rgba(130,0,0,.25);
     position:relative;
 }
-
 .hero::after{
     content:"CLASSIFIED";
     position:absolute;
-    right:25px;
-    top:25px;
+    right:25px;top:25px;
     color:rgba(255,0,0,.16);
     font-size:56px;
     transform:rotate(-12deg);
     border:3px solid rgba(255,0,0,.12);
     padding:8px 18px;
 }
-
-.logo{
-    color:#ff1e1e;
-    font-size:44px;
-    letter-spacing:5px;
-    text-shadow:0 0 14px #8b0000;
-}
-
-.sub{
-    margin-top:8px;
-    color:#aaa;
-    letter-spacing:2px;
-}
-
+.logo{color:#ff1e1e;font-size:44px;letter-spacing:5px;text-shadow:0 0 14px #8b0000}
+.sub{margin-top:8px;color:#aaa;letter-spacing:2px}
 .operation{
     margin-top:25px;
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
     gap:12px;
 }
-
-.opbox{
-    border:1px solid #2b2b2b;
-    background:#050505;
-    padding:14px;
-}
-
-.opbox span{
-    display:block;
-    color:#777;
-    font-size:12px;
-}
-
-.opbox b{
-    color:#fff;
-    font-size:16px;
-}
-
-.red{
-    color:#ff2b2b!important;
-}
-
+.opbox{border:1px solid #2b2b2b;background:#050505;padding:14px}
+.opbox span{display:block;color:#777;font-size:12px}
+.opbox b{color:#fff;font-size:16px}
+.red{color:#ff2b2b!important}
 .section-title{
     margin:35px 0 15px;
     color:#ff2b2b;
@@ -136,13 +79,7 @@ body::after{
     padding-left:12px;
     letter-spacing:2px;
 }
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:18px;
-}
-
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
 .card{
     background:#070707;
     border:1px solid #2c2c2c;
@@ -151,40 +88,15 @@ body::after{
     position:relative;
     transition:.2s;
 }
-
-.card:hover{
-    border-color:#a00000;
-    transform:translateY(-3px);
-    box-shadow:0 0 22px rgba(170,0,0,.22);
-}
-
-.card h2{
-    color:#fff;
-    font-size:18px;
-    margin-top:0;
-}
-
-.card p{
-    color:#aaa;
-    line-height:1.5;
-    font-size:14px;
-}
-
+.card:hover{border-color:#a00000;transform:translateY(-3px);box-shadow:0 0 22px rgba(170,0,0,.22)}
+.card h2{color:#fff;font-size:18px;margin-top:0}
+.card p{color:#aaa;line-height:1.5;font-size:14px}
 .stamp{
-    position:absolute;
-    bottom:15px;
-    left:20px;
-    color:#ff2b2b;
-    border:1px solid #740000;
-    padding:4px 8px;
-    font-size:12px;
+    position:absolute;bottom:15px;left:20px;
+    color:#ff2b2b;border:1px solid #740000;
+    padding:4px 8px;font-size:12px;
 }
-
-a{
-    color:inherit;
-    text-decoration:none;
-}
-
+a{color:inherit;text-decoration:none}
 .terminal{
     margin-top:30px;
     background:#030303;
@@ -193,39 +105,13 @@ a{
     color:#bfbfbf;
     font-size:13px;
 }
-
-.terminal p{
-    margin:6px 0;
-}
-
-.redacted{
-    background:#000;
-    color:transparent;
-    padding:0 35px;
-    user-select:none;
-}
-
-.footer{
-    margin-top:35px;
-    color:#555;
-    font-size:12px;
-    border-top:1px solid #222;
-    padding-top:18px;
-}
-
-@keyframes flicker{
-    0%,100%{opacity:1}
-    47%{opacity:.98}
-    50%{opacity:.78}
-    53%{opacity:1}
-}
-
-.flicker{
-    animation:flicker 3.5s infinite;
-}
+.terminal p{margin:6px 0}
+.redacted{background:#000;color:transparent;padding:0 35px;user-select:none}
+.footer{margin-top:35px;color:#555;font-size:12px;border-top:1px solid #222;padding-top:18px}
+@keyframes flicker{0%,100%{opacity:1}47%{opacity:.98}50%{opacity:.78}53%{opacity:1}}
+.flicker{animation:flicker 3.5s infinite}
 </style>
 </head>
-
 <body>
 
 <div class="topbar">
@@ -234,87 +120,47 @@ a{
 </div>
 
 <div class="wrapper">
-
     <section class="hero flicker">
         <div class="logo">SENTINEL INITIATIVE</div>
         <div class="sub">GLOBAL STABILITY DIVISION</div>
-
         <div class="operation">
-            <div class="opbox">
-                <span>OPERATION STATUS</span>
-                <b class="red">ACTIVE</b>
-            </div>
-            <div class="opbox">
-                <span>ARCHIVE ACCESS</span>
-                <b>ORCHID</b>
-            </div>
-            <div class="opbox">
-                <span>REALITY DEVIATION</span>
-                <b class="red">ELEVATED</b>
-            </div>
-            <div class="opbox">
-                <span>FIB TRANSFER</span>
-                <b>DISALLOWED</b>
-            </div>
+            <div class="opbox"><span>OPERATION STATUS</span><b class="red">ACTIVE</b></div>
+            <div class="opbox"><span>ARCHIVE ACCESS</span><b>ORCHID</b></div>
+            <div class="opbox"><span>REALITY DEVIATION</span><b class="red">ELEVATED</b></div>
+            <div class="opbox"><span>FIB TRANSFER</span><b>DISALLOWED</b></div>
         </div>
     </section>
 
     <h3 class="section-title">ACTIVE CASE FILES</h3>
 
     <section class="grid">
-
-    <!-- EINZIGE OFFENE AKTE -->
-    <a href="incident-77A.html">
+        <a href="incident-77A.html">
+            <div class="card">
+                <h2>SI-GSD-77A-Ω</h2>
+                <p>Nukleares U-Boot. Explosion unbekannter Herkunft. Sensorwerte widersprechen der offiziellen Zeitlinie.</p>
+                <div class="stamp">AVAILABLE</div>
+            </div>
+        </a>
+        <a href="access-incident.html">
+            <div class="card">
+                <h2>████████████</h2>
+                <p><span class="redacted">MULTIPLE INCIDENT FILES</span></p>
+                <div class="stamp">CLEARANCE REQUIRED</div>
+            </div>
+        </a>
         <div class="card">
-            <h2>SI-GSD-77A-Ω</h2>
-
-            <p>
-                Nukleares U-Boot. Explosion unbekannter Herkunft.
-                Sensorwerte widersprechen der offiziellen Zeitlinie.
-            </p>
-
-            <div class="stamp">AVAILABLE</div>
+            <h2>████████████</h2>
+            <p><span class="redacted">Zeitlinienabweichung / Echo-Korrelation / Vorfallserie</span></p>
+            <div class="stamp">RESTRICTED</div>
         </div>
-    </a>
-
-    <!-- GESCHWÄRZTE AKTEN -->
-
-    <a href="access-incident.html">
-    <div class="card locked-card">
-        <h2>████████████</h2>
-        <p><span class="redacted">MULTIPLE INCIDENT FILES</span></p>
-        <div class="stamp">CLEARANCE REQUIRED</div>
-    </div>
-</a>
-
-    <div class="card">
-        <h2>████████████</h2>
-
-        <p>
-            <span class="redacted">
-            Zeitlinienabweichung / Echo-Korrelation / Vorfallserie
-            </span>
-        </p>
-
-        <div class="stamp">RESTRICTED</div>
-    </div>
-
-    <div class="card">
-        <h2>████████████</h2>
-
-        <p>
-            <span class="redacted">
-            ECHO DIVISION Einsatzberichte und operative Einheiten
-            </span>
-        </p>
-
-        <div class="stamp">DENIED</div>
-    </div>
-
-</section>
+        <div class="card">
+            <h2>████████████</h2>
+            <p><span class="redacted">ECHO DIVISION Einsatzberichte und operative Einheiten</span></p>
+            <div class="stamp">DENIED</div>
+        </div>
+    </section>
 
     <h3 class="section-title">OPERATION LOG</h3>
-
     <div class="terminal">
         <p>> Verbindung zu Sentinel-Knoten hergestellt...</p>
         <p>> Archivintegrität: 64%</p>
@@ -327,8 +173,20 @@ a{
         Sentinel Initiative — Global Stability Division<br>
         Dieses System existiert offiziell nicht. Jede Einsichtnahme wurde protokolliert.
     </div>
-
 </div>
+
+<script>
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        e.preventDefault();
+        if (window.parent !== window) {
+            window.parent.postMessage({ type: 'sentinel:back' }, '*');
+        } else {
+            history.back();
+        }
+    }
+});
+</script>
 
 </body>
 </html>
