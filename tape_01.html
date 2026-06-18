@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AUDIOFRAGMENT 01</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:#020202;color:#ddd;font-family:'Share Tech Mono',monospace;padding:35px;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:10;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.028),rgba(255,255,255,.028) 1px,transparent 1px,transparent 4px)}
+.panel{max-width:980px;margin:auto;border:1px solid #8b0000;background:linear-gradient(135deg,rgba(120,0,0,.12),transparent 38%),#080808;padding:30px;box-shadow:0 0 35px rgba(120,0,0,.22)}
+a{color:#999;text-decoration:none}a:hover{color:#ccc}h1{color:#ff2b2b;letter-spacing:3px;margin-bottom:5px}.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:22px 0}.m{border:1px solid #252525;background:#050505;padding:12px;color:#aaa}.m span{display:block;color:#666;font-size:12px}.m b{color:#fff}.warn{color:#ffaa33}.red{color:#ff2b2b}.player{margin:26px 0;border:1px solid #2b2b2b;background:#030303;padding:22px}.cassette{height:120px;border:1px solid #3a1a1a;background:linear-gradient(90deg,#070707,#150505,#070707);display:flex;align-items:center;justify-content:center;margin-bottom:18px;position:relative;overflow:hidden}.cassette::before,.cassette::after{content:"";width:58px;height:58px;border:8px solid #1d1d1d;border-radius:50%;background:#050505;box-shadow:0 0 18px #000}.cassette::before{margin-right:120px}.cassette::after{margin-left:0}.label{position:absolute;top:16px;left:50%;transform:translateX(-50%);border:1px solid #8b0000;padding:5px 12px;color:#ff2b2b;background:#070707;letter-spacing:2px}audio,video{width:100%;margin-top:8px}.note{border-left:4px solid #8b0000;padding:14px 16px;background:#050505;color:#aaa;line-height:1.55}.log{margin-top:22px;border:1px solid #222;background:#050505;padding:16px;color:#888;line-height:1.6;font-size:14px}.hiddenline{color:#333}.footer{margin-top:25px;color:#555;font-size:12px;border-top:1px solid #222;padding-top:15px}
+</style>
+</head>
+<body>
+<div class="panel">
+    <a href="incident-archive.html">← RETURN TO INCIDENT ARCHIVE</a>
+    <h1>AUDIOFRAGMENT 01</h1>
+    <div class="warn">WARTUNGSBAND NR. 07 // RECONSTRUCTED</div>
+
+    <div class="meta">
+        <div class="m"><span>CASE</span><b>SI-GSD-77A-Ω</b></div>
+        <div class="m"><span>RECOVERY SOURCE</span><b>BLACKBOX CACHE</b></div>
+        <div class="m"><span>VOICE COUNT</span><b>3 + UNKNOWN</b></div>
+        <div class="m"><span>STATUS</span><b class="red">UNVERIFIED</b></div>
+    </div>
+
+    <div class="player">
+        <div class="cassette"><div class="label">TAPE_01 // 17340</div></div>
+
+        <!--
+            HIER DEINE DATEI EINFÜGEN:
+            1. Lege deine Aufnahme in den Ordner /assets/
+            2. Benenne sie z.B. tape-01.mp3 oder tape-01.mp4
+            3. Passe unten bei src den Dateinamen an.
+        -->
+        <audio controls preload="metadata">
+            <source src="assets/tape-01.mp3" type="audio/mpeg">
+            <source src="assets/tape-01.m4a" type="audio/mp4">
+            Dein Browser kann diese Audiodatei nicht abspielen.
+        </audio>
+
+        <!-- Falls du wirklich eine MP4 mit Bild/Video nutzen willst, entferne die Kommentarzeichen hier:
+        <video controls preload="metadata">
+            <source src="assets/tape-01.mp4" type="video/mp4">
+            Dein Browser kann diese Videodatei nicht abspielen.
+        </video>
+        -->
+    </div>
+
+    <div class="note">
+        > Die Aufnahme wurde nicht vollständig wiederhergestellt.<br>
+        > Zeitmarken widersprechen dem offiziellen Ereignisprotokoll.<br>
+        > Die Stimmen wurden keinem bekannten Sentinel-Personal eindeutig zugeordnet.<br>
+        > Empfehlung: Nicht isoliert auswerten. Abgleich mit physischen Fundstücken erforderlich.
+    </div>
+
+    <div class="log">
+        <div>> Nachfolgender Zugriff blockiert.</div>
+        <div>> AUDIOFRAGMENT 02 benötigt: <span class="red">RECOVERY-DATENTRÄGER ALPHA</span></div>
+        <div>> VIDEOFRAGMENT benötigt: <span class="red">VID-DECODER</span></div>
+        <div>> Datei S_M17 ist beschädigt.</div>
+        <div class="hiddenline">> smilesmilesmilesmilesmilesmile</div>
+    </div>
+
+    <div class="footer">
+        Spielleitung-Hinweis: Diese Seite ist als Archivknoten gedacht. Neue Fragmente können später einfach als weitere HTML-Seiten ergänzt und im Incident Archive verlinkt werden.
+    </div>
+</div>
+<script>
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        e.preventDefault();
+        if (window.parent !== window) window.parent.postMessage({ type: 'sentinel:back' }, '*');
+        else history.back();
+    }
+});
+</script>
+</body>
+</html>
