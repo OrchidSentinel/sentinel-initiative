@@ -10,7 +10,7 @@
 body{margin:0;min-height:100vh;background:#020202;color:#ddd;font-family:'Share Tech Mono',monospace;padding:35px;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:10;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.028),rgba(255,255,255,.028) 1px,transparent 1px,transparent 4px)}
 .panel{max-width:980px;margin:auto;border:1px solid #8b0000;background:linear-gradient(135deg,rgba(120,0,0,.12),transparent 38%),#080808;padding:30px;box-shadow:0 0 35px rgba(120,0,0,.22)}
-a{color:#999;text-decoration:none}a:hover{color:#ccc}h1{color:#ff2b2b;letter-spacing:3px;margin-bottom:5px}.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:22px 0}.m{border:1px solid #252525;background:#050505;padding:12px;color:#aaa}.m span{display:block;color:#666;font-size:12px}.m b{color:#fff}.warn{color:#ffaa33}.red{color:#ff2b2b}.player{margin:26px 0;border:1px solid #2b2b2b;background:#030303;padding:22px}.cassette{height:120px;border:1px solid #3a1a1a;background:linear-gradient(90deg,#070707,#150505,#070707);display:flex;align-items:center;justify-content:center;margin-bottom:18px;position:relative;overflow:hidden}.cassette::before,.cassette::after{content:"";width:58px;height:58px;border:8px solid #1d1d1d;border-radius:50%;background:#050505;box-shadow:0 0 18px #000}.cassette::before{margin-right:120px}.cassette::after{margin-left:0}.label{position:absolute;top:16px;left:50%;transform:translateX(-50%);border:1px solid #8b0000;padding:5px 12px;color:#ff2b2b;background:#070707;letter-spacing:2px}audio,video{width:100%;margin-top:8px}.note{border-left:4px solid #8b0000;padding:14px 16px;background:#050505;color:#aaa;line-height:1.55}.log{margin-top:22px;border:1px solid #222;background:#050505;padding:16px;color:#888;line-height:1.6;font-size:14px}.hiddenline{color:#333}.footer{margin-top:25px;color:#555;font-size:12px;border-top:1px solid #222;padding-top:15px}
+a{color:#999;text-decoration:none}a:hover{color:#ccc}h1{color:#ff2b2b;letter-spacing:3px;margin-bottom:5px}.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:22px 0}.m{border:1px solid #252525;background:#050505;padding:12px;color:#aaa}.m span{display:block;color:#666;font-size:12px}.m b{color:#fff}.warn{color:#ffaa33}.red{color:#ff2b2b}.player{margin:26px 0;border:1px solid #2b2b2b;background:#030303;padding:22px}.cassette{height:120px;border:1px solid #3a1a1a;background:linear-gradient(90deg,#070707,#150505,#070707);display:flex;align-items:center;justify-content:center;margin-bottom:18px;position:relative;overflow:hidden}.cassette::before,.cassette::after{content:"";width:58px;height:58px;border:8px solid #1d1d1d;border-radius:50%;background:#050505;box-shadow:0 0 18px #000}.cassette::before{margin-right:120px}.cassette::after{margin-left:0}.label{position:absolute;top:16px;left:50%;transform:translateX(-50%);border:1px solid #8b0000;padding:5px 12px;color:#ff2b2b;background:#070707;letter-spacing:2px}audio{display:none}.aud{display:flex;align-items:center;gap:14px;margin-top:14px;padding:14px 16px;border:1px solid #3a1a1a;background:#070707}.aud-btn{flex-shrink:0;width:44px;height:44px;border:1px solid #8b0000;background:#0a0000;color:#ff2b2b;font-size:15px;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.15s;text-shadow:0 0 8px #ff2b2b;line-height:1}.aud-btn:hover{background:#1a0000;box-shadow:0 0 14px rgba(255,43,43,.5)}.aud-time{flex-shrink:0;font-size:12px;color:#aa6666;letter-spacing:1px;min-width:40px;text-align:center}.aud-bar{flex:1;height:8px;background:#1a0a0a;border:1px solid #3a1a1a;position:relative;cursor:pointer;overflow:hidden}.aud-prog{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#5a0000,#ff2b2b);box-shadow:0 0 10px rgba(255,43,43,.6)}.aud-vol-ico{flex-shrink:0;font-size:11px;color:#777;letter-spacing:1px}.aud-vol{flex-shrink:0;width:90px;accent-color:#ff2b2b;cursor:pointer}.note{border-left:4px solid #8b0000;padding:14px 16px;background:#050505;color:#aaa;line-height:1.55}.log{margin-top:22px;border:1px solid #222;background:#050505;padding:16px;color:#888;line-height:1.6;font-size:14px}.hiddenline{color:#333}.footer{margin-top:25px;color:#555;font-size:12px;border-top:1px solid #222;padding-top:15px}
 </style>
 </head>
 <body>
@@ -29,23 +29,20 @@ a{color:#999;text-decoration:none}a:hover{color:#ccc}h1{color:#ff2b2b;letter-spa
     <div class="player">
         <div class="cassette"><div class="label">TAPE_01 // 17340</div></div>
 
-        <!--
-            HIER DEINE DATEI EINFÜGEN:
-            1. Lege deine Aufnahme in den Ordner /assets/
-            2. Benenne sie z.B. tape-01.mp3 oder tape-01.mp4
-            3. Passe unten bei src den Dateinamen an.
-        -->
-        <audio id="tape" controls preload="metadata">
+        <!-- Verstecktes Audio-Element (Engine). Browser: spielt nativ; ingame:
+             stumm + Ton ueber xSound. Custom-Controls darunter -> kein Download. -->
+        <audio id="tape" preload="metadata" controlslist="nodownload noplaybackrate noremoteplayback" oncontextmenu="return false">
             <source src="tape-01.mp3" type="audio/mpeg">
-            Dein Browser kann diese Audiodatei nicht abspielen.
         </audio>
 
-        <!-- Falls du wirklich eine MP4 mit Bild/Video nutzen willst, entferne die Kommentarzeichen hier:
-        <video controls preload="metadata">
-            <source src="assets/tape-01.mp4" type="video/mp4">
-            Dein Browser kann diese Videodatei nicht abspielen.
-        </video>
-        -->
+        <div class="aud">
+            <button id="aud-play" class="aud-btn" type="button" aria-label="Abspielen">&#9654;</button>
+            <div class="aud-time" id="aud-cur">0:00</div>
+            <div class="aud-bar" id="aud-bar"><div class="aud-prog" id="aud-prog"></div></div>
+            <div class="aud-time" id="aud-dur">0:00</div>
+            <div class="aud-vol-ico">VOL</div>
+            <input id="aud-vol" class="aud-vol" type="range" min="0" max="100" value="40" aria-label="Lautstaerke">
+        </div>
     </div>
 
     <div class="note">
@@ -77,37 +74,42 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// ── Audio-Wiedergabe ──────────────────────────────────────────────────────
-//  Browser (GitHub Pages):   das native <audio>-Element spielt ganz normal ab.
-//  Ingame (FiveM-NUI):        der Ton laeuft stattdessen ueber xSound. Das
-//                             <audio>-Element wird stummgeschaltet und dient
-//                             nur noch als Steuerung/Fortschrittsanzeige; jede
-//                             Aktion wird als NUI-Callback an die Resource
-//                             geschickt (siehe client/client.lua -> 'tapeAudio').
+// ── Audio-Player ──────────────────────────────────────────────────────────
+//  Eigener Player im Sentinel-Look statt nativem <audio controls> (kein
+//  Download-Button). Browser (GitHub Pages): das versteckte <audio> spielt
+//  nativ. Ingame (FiveM-NUI): <audio> ist stumm und dient als Engine/Anzeige;
+//  der Ton laeuft ueber xSound (client/client.lua -> 'tapeAudio' -> Server 3D).
 (function () {
-    var audio = document.getElementById('tape');
+    var audio   = document.getElementById('tape');
     if (!audio) return;
+    var playBtn = document.getElementById('aud-play');
+    var bar     = document.getElementById('aud-bar');
+    var prog    = document.getElementById('aud-prog');
+    var curEl   = document.getElementById('aud-cur');
+    var durEl   = document.getElementById('aud-dur');
+    var volEl   = document.getElementById('aud-vol');
+
+    var ICON_PLAY  = '\u25B6';  // ▶
+    var ICON_PAUSE = '\u23F8';  // ⏸
 
     // Ingame nur, wenn FiveM-NUI vorhanden ist (im Browser ist all das undefined).
     var inGame = (typeof GetParentResourceName === 'function') ||
                  (location.hostname.indexOf('cfx-nui-') === 0) ||
                  !!window.invokeNative;
-    if (!inGame) return;  // Browser: nichts veraendern, natives Audio bleibt aktiv.
+    var res = inGame
+        ? ((typeof GetParentResourceName === 'function') ? GetParentResourceName()
+                                                         : location.hostname.replace(/^cfx-nui-/, ''))
+        : null;
 
-    var res = (typeof GetParentResourceName === 'function')
-        ? GetParentResourceName()
-        : location.hostname.replace(/^cfx-nui-/, '');
-
-    // Absolute cfx-nui-URL der Audiodatei – ohne hartkodierten Resource-Pfad.
+    // Absolute cfx-nui-URL der Audiodatei (ohne hartkodierten Resource-Pfad).
     var src;
-    try { src = new URL('tape-01.mp3', location.href).href; }
-    catch (e) { src = 'tape-01.mp3'; }
+    try { src = new URL('tape-01.mp3', location.href).href; } catch (e) { src = 'tape-01.mp3'; }
 
-    // CEF-Ton aus; Ton kommt aus xSound. Moderate Start-Lautstaerke.
-    audio.muted = true;
-    audio.volume = 0.4;
+    audio.volume = 0.4;            // moderate Start-Lautstaerke
+    if (inGame) audio.muted = true; // CEF stumm – Ton kommt aus xSound
 
     function post(action, extra) {
+        if (!inGame) return;
         var body = { action: action };
         if (extra) for (var k in extra) body[k] = extra[k];
         try {
@@ -119,24 +121,57 @@ document.addEventListener('keydown', function(e) {
         } catch (e) {}
     }
 
+    function fmt(t) {
+        if (!isFinite(t) || t < 0) t = 0;
+        var m = Math.floor(t / 60), sec = Math.floor(t % 60);
+        return m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+
+    // ── Steuerung -> Audio-Element ──
+    playBtn.addEventListener('click', function () {
+        if (audio.paused) { audio.play(); } else { audio.pause(); }
+    });
+    bar.addEventListener('click', function (e) {
+        var r = bar.getBoundingClientRect();
+        var ratio = (e.clientX - r.left) / r.width;
+        ratio = Math.max(0, Math.min(1, ratio));
+        if (isFinite(audio.duration) && audio.duration > 0) audio.currentTime = ratio * audio.duration;
+    });
+    volEl.addEventListener('input', function () {
+        audio.volume = (parseInt(volEl.value, 10) || 0) / 100;
+        if (inGame) audio.muted = true; // stumm halten, Ton via xSound
+    });
+
+    // ── Audio-Events -> UI (+ xSound ingame) ──
     audio.addEventListener('play', function () {
+        playBtn.textContent = ICON_PAUSE;
         post('play', { url: src, time: audio.currentTime, volume: audio.volume });
     });
     audio.addEventListener('pause', function () {
+        playBtn.textContent = ICON_PLAY;
         if (!audio.ended) post('pause');
     });
-    audio.addEventListener('seeked', function () {
-        post('seek', { time: audio.currentTime });
+    audio.addEventListener('timeupdate', function () {
+        var d = audio.duration;
+        if (isFinite(d) && d > 0) prog.style.width = (audio.currentTime / d * 100) + '%';
+        curEl.textContent = fmt(audio.currentTime);
     });
+    function setDur() { durEl.textContent = fmt(audio.duration); }
+    audio.addEventListener('loadedmetadata', setDur);
+    audio.addEventListener('durationchange', setDur);
+    audio.addEventListener('seeked', function () { post('seek', { time: audio.currentTime }); });
     audio.addEventListener('volumechange', function () {
-        if (!audio.muted) audio.muted = true;  // CEF dauerhaft stumm halten
+        var v = Math.round(audio.volume * 100);
+        if (parseInt(volEl.value, 10) !== v) volEl.value = v;
         post('volume', { volume: audio.volume });
     });
     audio.addEventListener('ended', function () {
+        playBtn.textContent = ICON_PLAY;
+        prog.style.width = '0%';
         post('stop');
     });
 
-    // Seite verlassen (Zurueck-Navigation / Tablet schliessen) -> Ton stoppen.
+    // Seite verlassen (Zurueck/Schliessen) -> Ton stoppen.
     window.addEventListener('pagehide', function () { post('stop'); });
 })();
 </script>
