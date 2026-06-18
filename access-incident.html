@@ -37,7 +37,7 @@ button:hover{background:#b00000}
 
 <div class="panel">
     <h1>CLEARANCE REQUIRED</h1>
-    <p>Zugriff auf diese Datei wurde eingeschränkt. Geben Sie den autorisierten Sentinel-Code ein.</p>
+    <p>Zugriff auf diese Datei wurde eingeschränkt. Geben Sie den autorisierten Recovery-Code ein.</p>
     <input id="password" type="password" placeholder="ACCESS CODE">
     <button onclick="checkPassword()">VERIFY CLEARANCE</button>
     <div id="error" class="error"></div>
@@ -47,7 +47,7 @@ button:hover{background:#b00000}
 <script>
 function checkPassword() {
     const pw = document.getElementById('password').value;
-    if (pw === 'REACTOR-77') {
+    if (pw === '17340') {
         window.location.href = 'incident-archive.html';
     } else {
         document.getElementById('error').innerText = 'ACCESS DENIED // Versuch wurde protokolliert.';
