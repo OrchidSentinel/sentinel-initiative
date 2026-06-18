@@ -35,7 +35,7 @@ a{color:#999;text-decoration:none}a:hover{color:#ccc}h1{color:#ff2b2b;letter-spa
             2. Benenne sie z.B. tape-01.mp3 oder tape-01.mp4
             3. Passe unten bei src den Dateinamen an.
         -->
-        <audio controls preload="metadata">
+        <audio id="tape" controls preload="metadata">
             <source src="tape-01.mp3" type="audio/mpeg">
             Dein Browser kann diese Audiodatei nicht abspielen.
         </audio>
@@ -68,6 +68,7 @@ a{color:#999;text-decoration:none}a:hover{color:#ccc}h1{color:#ff2b2b;letter-spa
     </div>
 </div>
 <script>
+// Zurueck-Navigation (ESC) – im Tablet uebernimmt die Huelle, im Browser history.back.
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         e.preventDefault();
@@ -75,6 +76,69 @@ document.addEventListener('keydown', function(e) {
         else history.back();
     }
 });
+
+// ── Audio-Wiedergabe ──────────────────────────────────────────────────────
+//  Browser (GitHub Pages):   das native <audio>-Element spielt ganz normal ab.
+//  Ingame (FiveM-NUI):        der Ton laeuft stattdessen ueber xSound. Das
+//                             <audio>-Element wird stummgeschaltet und dient
+//                             nur noch als Steuerung/Fortschrittsanzeige; jede
+//                             Aktion wird als NUI-Callback an die Resource
+//                             geschickt (siehe client/client.lua -> 'tapeAudio').
+(function () {
+    var audio = document.getElementById('tape');
+    if (!audio) return;
+
+    // Ingame nur, wenn FiveM-NUI vorhanden ist (im Browser ist all das undefined).
+    var inGame = (typeof GetParentResourceName === 'function') ||
+                 (location.hostname.indexOf('cfx-nui-') === 0) ||
+                 !!window.invokeNative;
+    if (!inGame) return;  // Browser: nichts veraendern, natives Audio bleibt aktiv.
+
+    var res = (typeof GetParentResourceName === 'function')
+        ? GetParentResourceName()
+        : location.hostname.replace(/^cfx-nui-/, '');
+
+    // Absolute cfx-nui-URL der Audiodatei – ohne hartkodierten Resource-Pfad.
+    var src;
+    try { src = new URL('tape-01.mp3', location.href).href; }
+    catch (e) { src = 'tape-01.mp3'; }
+
+    // CEF-Ton aus; Ton kommt aus xSound. Moderate Start-Lautstaerke.
+    audio.muted = true;
+    audio.volume = 0.4;
+
+    function post(action, extra) {
+        var body = { action: action };
+        if (extra) for (var k in extra) body[k] = extra[k];
+        try {
+            fetch('https://' + res + '/tapeAudio', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            }).catch(function () {});
+        } catch (e) {}
+    }
+
+    audio.addEventListener('play', function () {
+        post('play', { url: src, time: audio.currentTime, volume: audio.volume });
+    });
+    audio.addEventListener('pause', function () {
+        if (!audio.ended) post('pause');
+    });
+    audio.addEventListener('seeked', function () {
+        post('seek', { time: audio.currentTime });
+    });
+    audio.addEventListener('volumechange', function () {
+        if (!audio.muted) audio.muted = true;  // CEF dauerhaft stumm halten
+        post('volume', { volume: audio.volume });
+    });
+    audio.addEventListener('ended', function () {
+        post('stop');
+    });
+
+    // Seite verlassen (Zurueck-Navigation / Tablet schliessen) -> Ton stoppen.
+    window.addEventListener('pagehide', function () { post('stop'); });
+})();
 </script>
 </body>
 </html>
